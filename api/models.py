@@ -7,10 +7,8 @@ from . import choices
 class User(AbstractUser):
     pass
 
-
 class Image(models.Model):
     image = models.ImageField()
-
 
 class Event(models.Model):
     poster = models.ForeignKey(User, on_delete=models.CASCADE)

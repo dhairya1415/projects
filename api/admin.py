@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Event, Image
+from .models import User, Event, Image, Report
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.admin import UserAdmin
 
@@ -19,3 +19,4 @@ admin.site.register(User, UserAdmin)
 
 admin.site.register(Event)
 admin.site.register(Image)
+admin.site.register(Report)
