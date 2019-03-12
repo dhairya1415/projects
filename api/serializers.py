@@ -1,29 +1,24 @@
 from rest_framework import serializers
-from .models import User,Event
+from .models import User, Event
 
 
 # All fields will be added based on discussion #
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = "__all__"
+
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = '__all__'
+        fields = "__all__"
 
 
 class SignUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = (
-            "first_name",
-            "last_name",
-            "email",
-            "username",
-            "password",
-        )
+        fields = ("first_name", "last_name", "email", "username", "password")
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):

@@ -6,13 +6,15 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
 
 from .serializers import *
-from .models import User,Event
+from .models import User, Event
 
 # Create your views here.
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
