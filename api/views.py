@@ -1,9 +1,11 @@
 from django.shortcuts import render
-from rest_framework import viewsets
 from django.contrib.auth import authenticate, login, logout
+
+from rest_framework import viewsets
 from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
-from .serializers import UserSerializer,EventSerializer
+
+from .serializers import *
 from .models import User,Event
 
 # Create your views here.
