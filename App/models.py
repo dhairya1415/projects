@@ -20,4 +20,3 @@ class Event(models.Model):
     description = models.TextField()
     organizer = models.CharField()
     photograph = models.ImageField()
-    report = models.FileField()
