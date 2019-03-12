@@ -5,5 +5,7 @@ Click==7.0
 Django==2.1.7
 django-cors-headers==2.5.0
 djangorestframework==3.9.2
+Pillow==5.4.1
+pytz==2018.9
 djoser==1.4.0
 toml==0.10.0
