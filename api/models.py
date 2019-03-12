@@ -25,3 +25,6 @@ class Event(models.Model):
     description = models.TextField()
     organizer = models.CharField(max_length=256)
     photograph = models.ForeignKey(Image, on_delete=models.CASCADE)
+
+class Report(models.Model):
+    pass
