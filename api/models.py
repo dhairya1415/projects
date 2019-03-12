@@ -11,7 +11,7 @@ class User(AbstractUser):
 
 
 class Event(models.Model):
-    poster = models.ForeignKey(User, on_delete=models.CASCADE, primary_key=True)
+    poster = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
     startdate = models.DateTimeField()
     enddate = models.DateTimeField()
@@ -19,7 +19,7 @@ class Event(models.Model):
     department = models.CharField(
         max_length=6, choices=choices.DEPARTMENT, default="COMPS"
     )
-    expert_name = models.CharField()
+    expert_name = models.CharField(max_length=256)
     description = models.TextField()
-    organizer = models.CharField()
+    organizer = models.CharField(max_length=256)
     photograph = models.ImageField()
