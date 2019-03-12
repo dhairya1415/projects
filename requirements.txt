@@ -1,0 +1,10 @@
+appdirs==1.4.3
+attrs==19.1.0
+black==18.9b0
+Click==7.0
+Django==2.1.7
+django-cors-headers==2.5.0
+djangorestframework==3.9.2
+Pillow==5.4.1
+pytz==2018.9
+toml==0.10.0
