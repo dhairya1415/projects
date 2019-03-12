@@ -1,7 +1,7 @@
 DEPARTMENT = (
-    ("EXTC", "Electronics and Telecommunication"),
-    ("MECH", "Mechanical"),
-    ("COMPS", "Computer"),
-    ("IT", "Information Technology"),
-    ("ETRX", "Electronics"),
+    ("EXTC", "EXTC"),
+    ("MECH", "MECH"),
+    ("COMPS", "COMPS"),
+    ("IT", "IT"),
+    ("ETRX", "ETRX"),
 )
