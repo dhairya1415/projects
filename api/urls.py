@@ -21,10 +21,12 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register("event", views.EventViewSet)
+router.register("event_custom", views.EventViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
+    path("event/<int:month>/<int:year>",views.event_list,name = 'month_request'),
+    path("event/<str:date>",views.event_date,name = 'date_request'),
     path("admin/", admin.site.urls),
     path("signup/", views.SignUp.as_view(), name="signup"),
     path("login/", views.Login.as_view(), name="login"),
