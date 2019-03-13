@@ -10,38 +10,61 @@ from .serializers import *
 from .models import User, Event
 
 # Create your views here.
+"""
+User Data API
+"""
 
-@api_view(['GET',])
-def event_list(request, month, year):
-    """
-    List all code snippets, or create a new
-    """
-    if request.method == 'GET':
-        event = Event.objects.filter(start_date__month = month, start_date__year = year)
-        serializer = EventSerializer(event, many=True)
-        return Response(serializer.data)
-
-@api_view(['GET',])
-def event_date(request, date):
-    """
-    List all code Event, or create a new Event
-    """
-    if request.method == 'GET':
-        event = Event.objects.filter(start_date = date)
-        serializer = EventSerializer(event, many=True)
-        return Response(serializer.data)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+
+"""
+Event Data API
+"""
+
+
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
+
+@api_view(["GET"])
+def event_list(request, month, year):
+    """
+    List all events according to month and year
+    """
+    if request.method == "GET":
+        event = Event.objects.filter(start_date__month=month, start_date__year=year)
+        serializer = EventSerializer(event, many=True)
+        return Response(serializer.data)
+
+
+@api_view(["GET"])
+def event_date(request, date):
+    """
+    List all Events according to date
+    """
+    if request.method == "GET":
+        event = Event.objects.filter(start_date=date)
+        serializer = EventSerializer(event, many=True)
+        return Response(serializer.data)
+
+
+"""
+User Signup
+"""
+
+
 class SignUp(CreateAPIView):
     queryset = User.objects.all()
     serializer_class = SignUpSerializer
+
+
+"""
+User Login
+"""
 
 
 class Login(APIView):
@@ -58,6 +81,11 @@ class Login(APIView):
             return HttpResponseRedirect(redirect_to="//")
         else:
             return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+
+
+"""
+User Logout
+"""
 
 
 class Logout(APIView):
