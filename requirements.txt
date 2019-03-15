@@ -9,3 +9,4 @@ Pillow==5.4.1
 pytz==2018.9
 djoser==1.4.0
 toml==0.10.0
+pandas==0.23.4

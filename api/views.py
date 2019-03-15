@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import *
 from .models import *
+from .utility import generate_csv
 import requests
 import json
 
@@ -83,7 +84,9 @@ class ImageViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         report_api = requests.get(serializer.data["report"])
         report_data = report_api.json()
-        print(report_data)
+        event_api = requests.get(report_data["event"])
+        event_data = event_api.json()
+        generate_csv(report_data, event_data)
         headers = self.get_success_headers(serializer.data)
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
