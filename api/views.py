@@ -1,13 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework import viewsets
 from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
 from .serializers import *
-from .models import User, Event
+from .models import *
 
 # Create your views here.
 """
@@ -53,6 +52,31 @@ def event_date(request, date):
 
 
 """
+Report API DATA
+"""
+
+
+class ReportViewSet(viewsets.ModelViewSet):
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializer
+
+
+# def report_getter(request, id):
+#     report = Reports.get_object_or_404(pk=id)
+
+
+
+"""
+Image API DATA
+"""
+
+
+class ImageViewSet(viewsets.ModelViewSet):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
+
+
+"""
 User Signup
 """
 
@@ -78,6 +102,7 @@ class Login(APIView):
                 # password=serializer.data.get("password"),
             )
             login(request, user)
+            #backend='django.contrib.auth.backends.ModelBackend'
             return HttpResponseRedirect(redirect_to="//")
         else:
             return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
@@ -92,3 +117,12 @@ class Logout(APIView):
     def post(self, request):
         logout(request)
         return HttpResponseRedirect(redirect_to="//")
+
+
+class ReportViewSet(viewsets.ModelViewSet):
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializer
+
+# Model signal on_save -> PDF
+# /report/pdf/1 -> Retrieve from MEDIA_URL
+# /report/pdf/1/send_email -> Definitely send the Emails
