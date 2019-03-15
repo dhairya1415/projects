@@ -1,12 +1,14 @@
 from django.shortcuts import render, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.decorators import api_view, action
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import *
 from .models import *
+import requests
+import json
 
 # Create your views here.
 """
@@ -63,6 +65,7 @@ class ReportViewSet(viewsets.ModelViewSet):
 
 # def report_getter(request, id):
 #     report = Reports.get_object_or_404(pk=id)
+#     print(report.venue)
 
 
 """
@@ -74,6 +77,22 @@ class ImageViewSet(viewsets.ModelViewSet):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        report_api = requests.get(serializer.data["report"])
+        report_data = report_api.json()
+        print(report_data)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
+
+
+# Here as soon as an image is added the json data of the report generated is taken for pdf generation
+# All the function for pdf generation will be called in this create method
+# Any update or new image addition will also override the previous csv or pdf generated
 
 """
 User Signup

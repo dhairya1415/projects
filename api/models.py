@@ -43,3 +43,7 @@ class Image(models.Model):
 #
 
 # Connect model Event to Model User one event many users#
+# The Report part will take place in 3 steps
+# 1. User will enter all the fields of the report model and click submit
+# 2. User will then upload the images where the report model just created will be referenced from the frontend
+# 3. User will get the option to send the email of the report
