@@ -65,7 +65,6 @@ class ReportViewSet(viewsets.ModelViewSet):
 #     report = Reports.get_object_or_404(pk=id)
 
 
-
 """
 Image API DATA
 """
@@ -102,7 +101,7 @@ class Login(APIView):
                 # password=serializer.data.get("password"),
             )
             login(request, user)
-            #backend='django.contrib.auth.backends.ModelBackend'
+            # backend='django.contrib.auth.backends.ModelBackend'
             return HttpResponseRedirect(redirect_to="//")
         else:
             return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
@@ -122,6 +121,7 @@ class Logout(APIView):
 class ReportViewSet(viewsets.ModelViewSet):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
+
 
 # Model signal on_save -> PDF
 # /report/pdf/1 -> Retrieve from MEDIA_URL

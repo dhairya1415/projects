@@ -33,6 +33,7 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
 
 class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(style={"input_type": "password"})
+
     class Meta:
         model = User
         fields = ("first_name", "last_name", "email", "username", "password")

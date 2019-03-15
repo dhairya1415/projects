@@ -7,7 +7,8 @@ from . import choices
 class User(AbstractUser):
     pass
 
-#department
+
+# department
 # Amogh's part
 
 
