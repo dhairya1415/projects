@@ -12,5 +12,4 @@ def generate_csv(report_data, event_data):
     yf = pf.join(df)
     yf.to_csv("media/csv/{}.csv".format(event_data["name"]))
     file = "media/csv/{}.csv".format(event_data["name"])
-    print(file)
     import_data(file)
