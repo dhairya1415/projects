@@ -3,30 +3,37 @@ from reportlab.lib.pagesizes import letter, landscape, portrait, A4
 from reportlab.platypus import Image
 from reportlab.lib.units import inch, cm
 import csv
+import pandas as pd
 
 
 def import_data(data_file):
-    attendee_data = csv.reader(open(data_file, "r"))
-    for row in attendee_data:
-        event_name = row[0]
-        event_venue = row[1]
-        no_of_participants = row[2]
-        event_department = row[3]
-        image = row[4].split(",")
-        print(image)
-        event_description = row[5]
-        event_date = row[6]
-        pdf_file_name = event_name + "$" + event_date + ".pdf"
-        generate_pdf(
-            event_name,
-            event_venue,
-            no_of_participants,
-            event_department,
-            image,
-            event_description,
-            event_date,
-            pdf_file_name,
-        )
+    df = pd.read_csv(data_file)
+    event_name = df["name"][0]
+    event_venue = df["venue"][0]
+    no_of_participants = df["number_of_participation"][0]
+    event_department = df["department"][0]
+    image = df["image"][0]
+    image = image.replace("[", "")
+    image = image.replace("]", "")
+    image = image.replace('"', "")
+    image = image.replace('"', "")
+    image = image.replace("'", "")
+    image = image.replace("'", "")
+    image = image.split(",")
+    print(type(image))
+    event_description = df["description"][0]
+    event_date = df["start_date"][0]
+    pdf_file_name = event_name + "$" + event_date + ".pdf"
+    generate_pdf(
+        event_name,
+        event_venue,
+        no_of_participants,
+        event_department,
+        image,
+        event_description,
+        event_date,
+        pdf_file_name,
+    )
 
 
 def generate_pdf(
