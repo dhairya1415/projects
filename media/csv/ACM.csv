@@ -1,0 +1,4 @@
+,department,description,end_date,expert_name,id,name,organizer,start_date,time,event,venue,number_of_participation,image,attendance
+0,COMPS,Hackathon,2019-03-17,Parag,1,ACM,"Preet
+Rashmil
+Siddharth",2019-03-16,05:33:00,http://127.0.0.1:8000/event_custom/1/,6th floor,45,"['http://127.0.0.1:8000/image/14/', 'http://127.0.0.1:8000/image/15/', 'http://127.0.0.1:8000/image/16/']",http://127.0.0.1:8000/media/Screenshot_41.png

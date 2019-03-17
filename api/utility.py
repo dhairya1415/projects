@@ -1,6 +1,7 @@
 import requests
 import json
 import pandas as pd
+from pdf_generation.task import import_data
 
 
 def generate_csv(report_data, event_data):
@@ -10,3 +11,6 @@ def generate_csv(report_data, event_data):
     df = df.drop(range(1, len(report_data["image"])))
     yf = pf.join(df)
     yf.to_csv("media/csv/{}.csv".format(event_data["name"]))
+    file = "media/csv/{}.csv".format(event_data["name"])
+    print(file)
+    import_data(file)
