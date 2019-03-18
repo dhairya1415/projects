@@ -5,7 +5,9 @@ from . import choices
 
 
 class User(AbstractUser):
-    pass
+    department = models.CharField(
+        max_length=6, choices=choices.DEPARTMENT, default="COMPS"
+    )
 
 
 # department
@@ -14,9 +16,9 @@ class User(AbstractUser):
 
 class Event(models.Model):
     name = models.CharField(max_length=128)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    time = models.TimeField()
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+    allDay = models.BooleanField(default = False)
     department = models.CharField(
         max_length=6, choices=choices.DEPARTMENT, default="COMPS"
     )
