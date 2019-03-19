@@ -16,6 +16,7 @@ import requests
 import json
 
 from .Email import send_mail
+
 # Create your views here.
 """
 User Data API
@@ -116,29 +117,27 @@ class SignUp(CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         current_site = get_current_site(request)
-        mail_subject = 'Activate your account.'
-        #The problems are here onwards
+        mail_subject = "Activate your account."
+        # The problems are here onwards
         user = request.user
         user.is_active = False
         user.save()
-        message = render_to_string('acc_active_email.html', {
-        'user': user,
-        'domain': current_site.domain,
-        'uidb64':user.pk,
-        'token':account_activation_token.make_token(user),
-    })
-        to_email = serializer.data.get('email')
-        email = EmailMessage(
-                mail_subject, message, to=[to_email]
-    )
+        message = render_to_string(
+            "acc_active_email.html",
+            {
+                "user": user,
+                "domain": current_site.domain,
+                "uidb64": user.pk,
+                "token": account_activation_token.make_token(user),
+            },
+        )
+        to_email = serializer.data.get("email")
+        email = EmailMessage(mail_subject, message, to=[to_email])
         email.send()
         headers = self.get_success_headers(serializer.data)
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
-
-
-
 
 
 """
@@ -182,15 +181,15 @@ class ReportViewSet(viewsets.ModelViewSet):
 def activate(request, uidb64, token):
     try:
         user = User.objects.get(pk=uidb64)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        login(request, user,backend='django.contrib.auth.backends.ModelBackend')
-        return HttpResponse('Sokcess')
+        login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+        return HttpResponse("Sokcess")
     else:
-        return HttpResponse('Failure')
+        return HttpResponse("Failure")
 
 
 # Model signal on_save -> PDF

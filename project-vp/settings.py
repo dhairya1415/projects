@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-#import environ
+
+# import environ
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,16 +30,16 @@ STATIC_DIR = os.path.join(BASE_DIR, "static")
 # environ.Env.read_env(BASE_DIR + '/.env')
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "wu^txkli_c4y-*$)ar20fyvzzu7a84r1axp8si3yt2ba911l2%" #env('SECRET_KEY')
+SECRET_KEY = "wu^txkli_c4y-*$)ar20fyvzzu7a84r1axp8si3yt2ba911l2%"  # env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True #env('DEBUG')
+DEBUG = True  # env('DEBUG')
 
 ALLOWED_HOSTS = []
 
-#email settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+# email settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
 EMAIL_HOST_USER = "djsanghvinoreply@gmail.com"
 EMAIL_HOST_PASSWORD = "Unicode@123"
 EMAIL_PORT = 587
@@ -56,7 +57,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "djoser",
-    "reports"
+    "reports",
 ]
 
 MIDDLEWARE = [
@@ -144,7 +145,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'preet378989@gmail.com'
-EMAIL_HOST_PASSWORD = 'zatchbell'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "preet378989@gmail.com"
+EMAIL_HOST_PASSWORD = "zatchbell"
 EMAIL_PORT = 587

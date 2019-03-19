@@ -6,7 +6,4 @@ DEPARTMENT = (
     ("ETRX", "ETRX"),
 )
 
-RECIPIENTS = [
-    "rashmilp833@gmail.com",
-    "damonsalvatore833@gmail.com",
-]
+RECIPIENTS = ["rashmilp833@gmail.com", "damonsalvatore833@gmail.com"]
