@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Event
+from .models import User, Event, Report, Image
 
 
 # All fields will be added based on discussion #
@@ -15,10 +15,28 @@ class EventSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ImageSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Image
+        fields = "__all__"
+
+
+class ReportSerializer(serializers.HyperlinkedModelSerializer):
+    image = serializers.HyperlinkedRelatedField(
+        many=True, view_name="image-detail", read_only=True
+    )
+
+    class Meta:
+        model = Report
+        fields = ("event", "venue", "number_of_participation", "image", "attendance")
+
+
 class SignUpSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(style={"input_type": "password"})
+
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "email", "username", "password")
+        fields = ("first_name", "last_name", "email", "username", "password",'department')
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
@@ -27,6 +45,7 @@ class SignUpSerializer(serializers.ModelSerializer):
             last_name=validated_data["last_name"],
             email=validated_data["email"],
             username=validated_data["username"],
+            department = validated_data['department']
         )
         user.set_password(validated_data["password"])
         user.save()

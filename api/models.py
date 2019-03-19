@@ -5,24 +5,47 @@ from . import choices
 
 
 class User(AbstractUser):
-    pass
+    department = models.CharField(
+        max_length=6, choices=choices.DEPARTMENT, default="COMPS"
+    )
 
-class Image(models.Model):
-    image = models.ImageField()
+
+# department
+# Amogh's part
+
 
 class Event(models.Model):
-    poster = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    time = models.TimeField()
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+    allDay = models.BooleanField(default = False)
     department = models.CharField(
         max_length=6, choices=choices.DEPARTMENT, default="COMPS"
     )
     expert_name = models.CharField(max_length=256)
     description = models.TextField()
-    organizer = models.CharField(max_length=256)
-    photograph = models.ForeignKey(Image, on_delete=models.CASCADE)
+    organizer = models.TextField()
+
 
 class Report(models.Model):
-    pass
+    event = models.OneToOneField(Event, on_delete=models.CASCADE)
+    venue = models.CharField(max_length=256)
+    number_of_participation = models.IntegerField()
+    # image_1 = models.ImageField()
+    # image_2 = models.ImageField()
+    # image_3 = models.ImageField()
+    attendance = models.FileField()
+
+
+class Image(models.Model):
+    image = models.ImageField()
+    report = models.ForeignKey(Report, related_name="image", on_delete=models.CASCADE)
+
+
+#
+
+# Connect model Event to Model User one event many users#
+# The Report part will take place in 3 steps
+# 1. User will enter all the fields of the report model and click submit
+# 2. User will then upload the images where the report model just created will be referenced from the frontend
+# 3. User will get the option to send the email of the report
