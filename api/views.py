@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from .serializers import *
 from .models import User, Event
 
+from .Email import send_mail
 # Create your views here.
 
 
@@ -46,3 +47,4 @@ class Logout(APIView):
     def post(self, request):
         logout(request)
         return HttpResponseRedirect(redirect_to="//")
+

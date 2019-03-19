@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+#import environ
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,14 +21,28 @@ STATIC_DIR = os.path.join(BASE_DIR, "static")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
+# env = environ.Env(
+#     SECRET_KEY=(str, "th15$i5$aN$uNsAfE+S3cr3t$k3y"),
+#     DEBUG=(bool, False),
+#     DEFAULT_FROM_EMAIL=(str, 'email@something.com'),
+# )
+# environ.Env.read_env(BASE_DIR + '/.env')
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "wu^txkli_c4y-*$)ar20fyvzzu7a84r1axp8si3yt2ba911l2%"
+SECRET_KEY = "wu^txkli_c4y-*$)ar20fyvzzu7a84r1axp8si3yt2ba911l2%" #env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True #env('DEBUG')
 
 ALLOWED_HOSTS = []
 
+#email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = "djsanghvinoreply@gmail.com"
+EMAIL_HOST_PASSWORD = "Unicode@123"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 # Application definition
 
@@ -41,6 +56,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "djoser",
+    "reports"
 ]
 
 MIDDLEWARE = [
