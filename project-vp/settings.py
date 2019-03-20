@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    'rest_framework.authtoken',
     "djoser",
 ]
 
@@ -132,3 +133,20 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'preet378989@gmail.com'
 EMAIL_HOST_PASSWORD = 'zatchbell'
 EMAIL_PORT = 587
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": {},
+    "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ),
+}
+
+DJOSER = {
+    "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
+    "ACTIVATION_URL": "",
+    "SEND_ACTIVATION_EMAIL": False,
+    "SERIALIZERS": {},
+    "TOKEN_MODEL": "rest_framework.authtoken.models.Token",
+}
