@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    'rest_framework.authtoken',
+    "rest_framework.authtoken",
     "djoser",
 ]
 
@@ -129,9 +129,9 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'preet378989@gmail.com'
-EMAIL_HOST_PASSWORD = 'zatchbell'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "preet378989@gmail.com"
+EMAIL_HOST_PASSWORD = "zatchbell"
 EMAIL_PORT = 587
 
 REST_FRAMEWORK = {

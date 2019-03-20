@@ -15,6 +15,8 @@ import json
 """
 User Data API
 """
+
+
 @api_view(["GET"])
 def user_list(request, first):
     """
@@ -24,6 +26,7 @@ def user_list(request, first):
         user = User.objects.filter(username=first)
         serializer = UserSerializer(user, many=True)
         return Response(serializer.data)
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -157,18 +160,18 @@ class ReportViewSet(viewsets.ModelViewSet):
 def activate(request, uidb64, token):
     try:
         user = User.objects.get(pk=uidb64)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        login(request, user,backend='django.contrib.auth.backends.ModelBackend')
-        #Http Response added only for testing purpose
-        return HttpResponse('Sokcess')
-        #Dhairya Here you redirect to Login page .......
+        login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+        # Http Response added only for testing purpose
+        return HttpResponse("Sokcess")
+        # Dhairya Here you redirect to Login page .......
     else:
-        #Http Response added only for testing purpose
-        return HttpResponse('Failure')
+        # Http Response added only for testing purpose
+        return HttpResponse("Failure")
 
 
 # Model signal on_save -> PDF

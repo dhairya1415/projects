@@ -18,7 +18,7 @@ class Event(models.Model):
     name = models.CharField(max_length=128)
     start = models.DateTimeField()
     end = models.DateTimeField()
-    allDay = models.BooleanField(default = False)
+    allDay = models.BooleanField(default=False)
     department = models.CharField(
         max_length=6, choices=choices.DEPARTMENT, default="COMPS"
     )
