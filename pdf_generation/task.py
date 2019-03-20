@@ -22,7 +22,8 @@ def import_data(data_file):
     image = image.split(",")
     print(type(image))
     event_description = df["description"][0]
-    event_date = df["start_date"][0]
+    event_date = df["start"][0]
+    event_date = str(event_date)[0:10]
     pdf_file_name = event_name + "$" + event_date + ".pdf"
     generate_pdf(
         event_name,

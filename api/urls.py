@@ -27,11 +27,20 @@ router.register("image", views.ImageViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("event/<int:month>/<int:year>", views.event_list, name="month_request"),
-    path("event/<str:date>", views.event_date, name="date_request"),
+    path(
+        "event/<int:month>/<int:year>", views.event_list, name="month_request"
+    ),  # Month data
+    path("user/<str:first>", views.user_list, name="profile"),  # user profile data
+    path(
+        "event/<str:date>", views.event_date, name="date_request"
+    ),  # Event data based on month
     path("admin/", admin.site.urls),
-    path("signup/", views.SignUp.as_view(), name="signup"),
-    path("login/", views.Login.as_view(), name="login"),
-    path("logout/", views.Logout.as_view(), name="logout"),
+    path("signup/", views.SignUp.as_view(), name="signup"),  # Signup
+    # path("login/", views.Login.as_view(), name="login"),
+    # path("logout/", views.Logout.as_view(), name="logout"),
     path("activate/<str:uidb64>/<str:token>", views.activate, name="activate"),
 ]
+
+# Dhairya Check these urls
+# Login Url:http://127.0.0.1:8000/auth/token/login This will give u a token --
+# Logout Url:http://127.0.0.1:8000/auth/token/logout

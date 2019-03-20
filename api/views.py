@@ -8,10 +8,6 @@ from rest_framework.response import Response
 from .serializers import *
 from .models import *
 from .utility import generate_csv
-from django.template.loader import render_to_string
-from .token import account_activation_token
-from django.core.mail import EmailMessage
-from django.contrib.sites.shortcuts import get_current_site
 import requests
 import json
 
@@ -21,6 +17,17 @@ from .Email import send_mail
 """
 User Data API
 """
+
+
+@api_view(["GET"])
+def user_list(request, first):
+    """
+    List all events according to month and year
+    """
+    if request.method == "GET":
+        user = User.objects.filter(username=first)
+        serializer = UserSerializer(user, many=True)
+        return Response(serializer.data)
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -44,7 +51,7 @@ def event_list(request, month, year):
     List all events according to month and year
     """
     if request.method == "GET":
-        event = Event.objects.filter(start_date__month=month, start_date__year=year)
+        event = Event.objects.filter(start__month=month, start__year=year)
         serializer = EventSerializer(event, many=True)
         return Response(serializer.data)
 
@@ -55,7 +62,7 @@ def event_date(request, date):
     List all Events according to date
     """
     if request.method == "GET":
-        event = Event.objects.filter(start_date=date)
+        event = Event.objects.filter(start__date=date)
         serializer = EventSerializer(event, many=True)
         return Response(serializer.data)
 
@@ -112,54 +119,28 @@ class SignUp(CreateAPIView):
     queryset = User.objects.all()
     serializer_class = SignUpSerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        current_site = get_current_site(request)
-        mail_subject = "Activate your account."
-        # The problems are here onwards
-        user = request.user
-        user.is_active = False
-        user.save()
-        message = render_to_string(
-            "acc_active_email.html",
-            {
-                "user": user,
-                "domain": current_site.domain,
-                "uidb64": user.pk,
-                "token": account_activation_token.make_token(user),
-            },
-        )
-        to_email = serializer.data.get("email")
-        email = EmailMessage(mail_subject, message, to=[to_email])
-        email.send()
-        headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data, status=status.HTTP_201_CREATED, headers=headers
-        )
-
 
 """
 User Login
 """
 
 
-class Login(APIView):
-    serializer_class = LoginSerializer
-
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            user = authenticate(
-                username=serializer.data.get("username"),
-                # password=serializer.data.get("password"),
-            )
-            login(request, user)
-            # backend='django.contrib.auth.backends.ModelBackend'
-            return HttpResponseRedirect(redirect_to="//")
-        else:
-            return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+# class Login(APIView):
+#     serializer_class = LoginSerializer
+#
+#     def post(self, request):
+#         serializer = LoginSerializer(data=request.data)
+#         if serializer.is_valid():
+#             user = authenticate(
+#                 username=serializer.data.get("username"),
+#                 password=serializer.data.get("password"),
+#             )
+#             login(request, user,backend='django.contrib.auth.backends.ModelBackend')
+#             return Response(
+#                 serializer.data, status=status.HTTP_201_CREATED
+#             )
+#         else:
+#             return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 
 """
@@ -167,10 +148,10 @@ User Logout
 """
 
 
-class Logout(APIView):
-    def post(self, request):
-        logout(request)
-        return HttpResponseRedirect(redirect_to="//")
+# class Logout(APIView):
+#     def post(self, request):
+#         logout(request)
+#         # return HttpResponseRedirect(redirect_to="//")
 
 
 class ReportViewSet(viewsets.ModelViewSet):
@@ -187,8 +168,11 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+        # Http Response added only for testing purpose
         return HttpResponse("Sokcess")
+        # Dhairya Here you redirect to Login page .......
     else:
+        # Http Response added only for testing purpose
         return HttpResponse("Failure")
 
 
