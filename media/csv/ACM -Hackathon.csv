@@ -1,4 +1,0 @@
-,allDay,department,description,end,expert_name,id,name,organizer,start,event,venue,number_of_participation,image,attendance
-0,True,COMPS,24 hours coding competition,2019-04-03T12:30:00Z,Preet Shah,1,ACM -Hackathon,"Siddharth Sanghvi,
-Palash Rathod,
-Parag Vaid",2019-04-02T07:00:00Z,http://127.0.0.1:8000/event_custom/1/,Vile Parle,20,"['http://127.0.0.1:8000/media/dad-1.jpeg', 'http://127.0.0.1:8000/media/dad-1_dfOXQiH.jpeg', 'http://127.0.0.1:8000/media/dad-1_Vc5ymw4.jpeg']",http://127.0.0.1:8000/media/coa.docx
