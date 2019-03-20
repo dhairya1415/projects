@@ -15,7 +15,17 @@ class UserSerializer(serializers.ModelSerializer):
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ('id','name','start','end','allDay','department','expert_name','description','organizer')
+        fields = (
+            "id",
+            "name",
+            "start",
+            "end",
+            "allDay",
+            "department",
+            "expert_name",
+            "description",
+            "organizer",
+        )
 
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
@@ -31,7 +41,14 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Report
-        fields = ("id","event", "venue", "number_of_participation", "image", "attendance")
+        fields = (
+            "id",
+            "event",
+            "venue",
+            "number_of_participation",
+            "image",
+            "attendance",
+        )
 
 
 class SignUpSerializer(serializers.ModelSerializer):
