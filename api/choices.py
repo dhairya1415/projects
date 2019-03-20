@@ -8,3 +8,5 @@ DEPARTMENT = (
     ("BIO-MED", "BIO-MED"),
     ("PROD", "PROD"),
 )
+
+RECIPIENTS = ["rashmilp833@gmail.com", "damonsalvatore833@gmail.com"]

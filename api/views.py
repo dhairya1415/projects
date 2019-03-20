@@ -11,6 +11,8 @@ from .utility import generate_csv
 import requests
 import json
 
+from .Email import send_mail
+
 # Create your views here.
 """
 User Data API
