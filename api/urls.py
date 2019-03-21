@@ -27,20 +27,10 @@ router.register("image", views.ImageViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
-<<<<<<< HEAD
     path("event/<int:month>/<int:year>", views.event_list, name="month_request"),
     path("month/<int:month>", views.month_report, name="month_report"),
     path("report_pdf/<int:pk>", views.report_pdf, name="report_pdf"),
     path("event/<str:date>", views.event_date, name="date_request"),
-=======
-    path(
-        "event/<int:month>/<int:year>", views.event_list, name="month_request"
-    ),  # Month data
-    path("user/<str:first>", views.user_list, name="profile"),  # user profile data
-    path(
-        "event/<str:date>", views.event_date, name="date_request"
-    ),  # Event data based on month
->>>>>>> f8d20dcc4280f27580c66e42463bdcc0e20ed74b
     path("admin/", admin.site.urls),
     path("signup/", views.SignUp.as_view(), name="signup"),  # Signup
     # path("login/", views.Login.as_view(), name="login"),

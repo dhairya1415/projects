@@ -3,6 +3,7 @@ import json
 import pandas as pd
 from pdf_generation.task import import_data
 
+month_dict = ['months','January','February','March','April','May','June','July','August','September','October','November','December']
 
 def generate_csv(report_data, event_data):
     df = pd.DataFrame.from_dict(report_data)
