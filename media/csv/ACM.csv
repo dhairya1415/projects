@@ -1,0 +1,3 @@
+,allDay,department,description,end,expert_name,id,name,organizer,start,event,venue,number_of_participation,image,attendance
+0,False,EXTC,HFGHSHSBS,2019-03-25T06:06:00Z,Parag,2,ACM,"DHHDS
+DJSIDJIS",2019-03-19T00:00:00Z,http://127.0.0.1:8000/event_custom/2/,6th floor,555,"['http://127.0.0.1:8000/media/Screenshot_38.png', 'http://127.0.0.1:8000/media/Screenshot_38_AaDGq3C.png', 'http://127.0.0.1:8000/media/Screenshot_38_TpcSDIi.png']",http://127.0.0.1:8000/media/Screenshot_39.png

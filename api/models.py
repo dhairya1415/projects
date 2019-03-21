@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-import datetime
+from datetime import datetime
 from . import choices
 
 
@@ -16,8 +16,8 @@ class User(AbstractUser):
 
 class Event(models.Model):
     name = models.CharField(max_length=128)
-    start = models.DateTimeField()
-    end = models.DateTimeField()
+    start = models.DateTimeField(default=datetime.now)
+    end = models.DateTimeField(default=datetime.now)
     allDay = models.BooleanField(default = False)
     department = models.CharField(
         max_length=6, choices=choices.DEPARTMENT, default="COMPS"
@@ -40,7 +40,6 @@ class Report(models.Model):
 class Image(models.Model):
     image = models.ImageField()
     report = models.ForeignKey(Report, related_name="image", on_delete=models.CASCADE)
-
 
 #
 

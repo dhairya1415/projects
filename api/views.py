@@ -14,6 +14,9 @@ from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 import requests
 import json
+import pandas as pd
+import csv
+from django.http import FileResponse
 
 # Create your views here.
 """
@@ -42,9 +45,47 @@ def event_list(request, month, year):
     List all events according to month and year
     """
     if request.method == "GET":
-        event = Event.objects.filter(start_date__month=month, start_date__year=year)
+        event = Event.objects.filter(start__month=month, start__year=year)
         serializer = EventSerializer(event, many=True)
         return Response(serializer.data)
+
+@api_view(["GET"])
+def report_pdf(request, pk):
+    if request.method == "GET":
+        #buffer = io.BytesIO()
+        event = Event.objects.get(id = pk)
+        name = event.name
+        print(name)
+        date = str(event.start)
+        date = date[0:10]
+        print(date)
+        response = HttpResponse(content_type='text/pdf')
+        filename="media/pdf/{}${}".format(name, date)
+        #return FileResponse(as_attachment=True, filename='{}.pdf'.format(filename))
+        response['Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(filename)
+        return response
+
+@api_view(["GET"])
+def month_report(request, month):
+    """
+    List all events according to month and year
+    """
+    if request.method == "GET":
+        event = Event.objects.filter(start__month=month, start__year=2019)
+        serializer = EventSerializer(event, many=True)
+        r_data = list(serializer.data)
+        for item in r_data:
+            item['start']=item['start'][0:10]
+        start_date='2019-{}-01'.format(month)#Set the starting date
+        end_date='2019-{}-31'.format(month)#Set the ending date
+        dates = pd.date_range(start_date,end_date)
+        df1=pd.DataFrame(index=dates)#Creates a dataframe with index being the dates list we created
+        df = pd.DataFrame.from_dict(r_data)
+        df.to_csv('media/csv/{}.csv'.format(month))
+        dfSPY = pd.read_csv('media/csv/{}.csv'.format(month),index_col="start",parse_dates=True,na_values=['nan','NaN'])
+        df1=df1.join(dfSPY,how='inner')
+        df1.to_csv('media/csv/{}.csv'.format(month))
+        return Response({"message":"Month Report generated"})
 
 
 @api_view(["GET"])
@@ -53,7 +94,7 @@ def event_date(request, date):
     List all Events according to date
     """
     if request.method == "GET":
-        event = Event.objects.filter(start_date=date)
+        event = Event.objects.filter(start=date)
         serializer = EventSerializer(event, many=True)
         return Response(serializer.data)
 
