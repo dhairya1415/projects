@@ -24,7 +24,6 @@ def import_data(data_file):
     image = image.replace("'", "")
     image = image.replace("'", "")
     image = image.split(",")
-    print(type(image))
     event_description = df["description"][0]
     event_date = df["start"][0]
     file_date = event_date[0:10]

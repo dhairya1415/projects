@@ -83,8 +83,8 @@ def report_pdf(request, pk):
         )
 
         # Send mail on click of download button
-        mail_subject = "Report of " + event.name
-        message = "A pdf of the " + event.name + "report is sent, Please go through it once."
+        mail_subject = "Report of " + name
+        message = "A pdf of the " + name + "report is sent, Please go through it once."
         to_email = user_email
         email = EmailMessage(mail_subject, message, to=[to_email])
         email.attach_file(filename)
