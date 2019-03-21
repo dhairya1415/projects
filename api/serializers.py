@@ -26,7 +26,6 @@ class EventSerializer(serializers.ModelSerializer):
             "expert_name",
             "description",
             "organizer",
-            "events"
         )
 
 
@@ -41,18 +40,17 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
         many=True, view_name="image-detail", read_only=True
     )
 
-    # events = EventSerializer(many = False , read_only = True)
-
     class Meta:
         model = Report
         fields = (
             "id",
             "event",
             "venue",
-            "number_of_participation",
+            "number_of_participants",
             "image",
             "attendance",
         )
+
 
 class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(style={"input_type": "password"})
