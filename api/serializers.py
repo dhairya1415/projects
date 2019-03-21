@@ -13,7 +13,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    # report = ReportSerializer(many = False, read_only = True) This thing displays reports data in event
     class Meta:
         model = Event
         fields = (
@@ -26,6 +25,7 @@ class EventSerializer(serializers.ModelSerializer):
             "expert_name",
             "description",
             "organizer",
+            "report",
         )
 
 
