@@ -13,6 +13,10 @@ def import_data(data_file):
     no_of_participants = df["number_of_participation"][0]
     event_department = df["department"][0]
     image = df["image"][0]
+    # replace_fields = ["[","]",'"',"'"]
+    # for string in replace_fields:
+    #     image = image.replace(string,"")
+    #test the above changes
     image = image.replace("[", "")
     image = image.replace("]", "")
     image = image.replace('"', "")
