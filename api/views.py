@@ -14,7 +14,6 @@ import pandas as pd
 import csv
 from django.http import FileResponse
 from wsgiref.util import FileWrapper
-
 import os
 from .Email import send_mail
 
@@ -74,7 +73,6 @@ def report_pdf(request, pk):
         response = HttpResponse(dataset,content_type='text/pdf')
         response['Content-Disposition'] = 'attachment; filename="{}"'.format(download_name)
         return response
-
 
 @api_view(["GET"])
 def month_report(request, month):

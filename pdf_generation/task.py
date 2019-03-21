@@ -37,6 +37,8 @@ def import_data(data_file):
     )
 
 
+
+
 def generate_pdf(
     event_name,
     event_venue,

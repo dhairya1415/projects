@@ -22,18 +22,15 @@ class Event(models.Model):
     department = models.CharField(
         max_length=6, choices=choices.DEPARTMENT, default="COMPS"
     )
-    expert_name = models.CharField(max_length=256)
-    description = models.TextField()
-    organizer = models.TextField()
+    expert_name = models.CharField(max_length=256, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    organizer = models.TextField(null=True, blank=True)
 
 
 class Report(models.Model):
-    event = models.OneToOneField(Event, on_delete=models.CASCADE)
+    event = models.OneToOneField(Event, related_name = 'events',on_delete=models.CASCADE)
     venue = models.CharField(max_length=256)
     number_of_participation = models.IntegerField()
-    # image_1 = models.ImageField()
-    # image_2 = models.ImageField()
-    # image_3 = models.ImageField()
     attendance = models.FileField()
 
 

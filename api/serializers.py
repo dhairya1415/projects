@@ -13,6 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
+    # report = ReportSerializer(many = False, read_only = True) This thing displays reports data in event
     class Meta:
         model = Event
         fields = (
@@ -25,6 +26,7 @@ class EventSerializer(serializers.ModelSerializer):
             "expert_name",
             "description",
             "organizer",
+            "events"
         )
 
 
@@ -39,6 +41,8 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
         many=True, view_name="image-detail", read_only=True
     )
 
+    # events = EventSerializer(many = False , read_only = True)
+
     class Meta:
         model = Report
         fields = (
@@ -49,7 +53,6 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
             "image",
             "attendance",
         )
-
 
 class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(style={"input_type": "password"})

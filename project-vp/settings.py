@@ -49,6 +49,7 @@ EMAIL_USE_TLS = True
 
 INSTALLED_APPS = [
     "api",
+    'corsheaders',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -61,6 +62,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -69,6 +72,11 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+APPEND_SLASH = False
 
 ROOT_URLCONF = "project-vp.urls"
 
@@ -143,12 +151,6 @@ STATICFILES_DIRS = [STATIC_DIR]
 MEDIA_URL = "/media/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
-EMAIL_USE_TLS = True
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "preet378989@gmail.com"
-EMAIL_HOST_PASSWORD = "zatchbell"
-EMAIL_PORT = 587
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": {},
