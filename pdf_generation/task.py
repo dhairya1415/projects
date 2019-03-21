@@ -16,7 +16,7 @@ def import_data(data_file):
     # replace_fields = ["[","]",'"',"'"]
     # for string in replace_fields:
     #     image = image.replace(string,"")
-    #test the above changes
+    # test the above changes
     image = image.replace("[", "")
     image = image.replace("]", "")
     image = image.replace('"', "")
