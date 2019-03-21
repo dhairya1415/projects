@@ -7,10 +7,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import *
 from .models import *
-from .utility import generate_csv
+from .utility import generate_csv, month_dict
 import requests
 import json
-
+import pandas as pd
+import csv
+from django.http import FileResponse
+from wsgiref.util import FileWrapper
+import os
 from .Email import send_mail
 
 # Create your views here.
@@ -54,6 +58,59 @@ def event_list(request, month, year):
         event = Event.objects.filter(start__month=month, start__year=year)
         serializer = EventSerializer(event, many=True)
         return Response(serializer.data)
+
+
+# Just use this url and it will downnload the pdf
+@api_view(["GET"])
+def report_pdf(request, pk):
+    if request.method == "GET":
+        event = Event.objects.get(id=pk)
+        name = event.name
+        date = str(event.start)
+        date = date[0:10]
+        response = HttpResponse(content_type="text/pdf")
+        filename = "media/pdf/{}${}.pdf".format(name, date)
+        download_name = "{}_Report.pdf".format(name)
+        dataset = open(filename, "r")
+        response = HttpResponse(dataset, content_type="text/pdf")
+        response["Content-Disposition"] = 'attachment; filename="{}"'.format(
+            download_name
+        )
+        return response
+
+
+# Just use this url and it will downnload the pdf
+@api_view(["GET"])
+def month_report(request, month):
+    """
+    List all events according to month and year
+    """
+    if request.method == "GET":
+        event = Event.objects.filter(start__month=month, start__year=2019)
+        serializer = EventSerializer(event, many=True)
+        r_data = list(serializer.data)
+        month_name = month_dict[month]
+        filename = "media/csv_month/{}.csv".format(month_name)
+        for item in r_data:
+            item["start"] = item["start"][0:10]
+        start_date = "2019-{}-01".format(month)
+        end_date = "2019-{}-31".format(month)
+        dates = pd.date_range(start_date, end_date)
+        zf = pd.DataFrame(index=dates)
+        df = pd.DataFrame.from_dict(r_data)
+        df.to_csv(filename)
+        nf = pd.read_csv(
+            filename, index_col="start", parse_dates=True, na_values=["nan", "NaN"]
+        )
+        nf = nf.drop(columns=[nf.columns[0], nf.columns[1]])
+        zf = zf.join(nf, how="inner")
+        zf.to_csv(filename)
+        dataset = open(filename, "r")
+        response = HttpResponse(dataset, content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="{}_Report.csv"'.format(
+            month_name
+        )
+        return response
 
 
 @api_view(["GET"])
@@ -168,7 +225,7 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         # login(request, user, backend="django.contrib.auth.backends.ModelBackend")
-        #The login function directly log's in the user without entering credentials
+        # The login function directly log's in the user without entering credentials
         # Dhairya Here you redirect to Login page and then to calender page ..
         # Http Response added only for testing purpose
         return HttpResponseRedirect('http://localhost:3000/login')

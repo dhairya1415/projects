@@ -1,12 +1,13 @@
 DEPARTMENT = (
-    ("EXTC", "EXTC"),
-    ("MECH", "MECH"),
-    ("COMPS", "COMPS"),
+    ("EXTC", "Electronics & Communication"),
+    ("MECH", "Mechanical"),
+    ("COMPS", "Computers"),
     ("IT", "IT"),
-    ("ETRX", "ETRX"),
-    ("CHEM", "CHEM"),
-    ("BIO-MED", "BIO-MED"),
-    ("PROD", "PROD"),
+    ("ETRX", "Electronics"),
+    ("CHEM", "Chemical"),
+    ("BIOMED", "Bio-medical"),
+    ("PROD", "Production"),
+    ("OTHER", "Other/ No department"),
 )
 
 RECIPIENTS = ["rashmilp833@gmail.com", "damonsalvatore833@gmail.com"]
