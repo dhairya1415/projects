@@ -44,8 +44,7 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
         many=True, view_name="image-detail", read_only=True
     )
     event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all())
-    event_data = EventSerializer(read_only=True, source='event')
-
+    event_data = EventSerializer(read_only=True, source="event")
 
     class Meta:
         model = Report

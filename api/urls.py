@@ -27,8 +27,9 @@ router.register("image", views.ImageViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("month/<int:month>", views.month_report, name="month_report"),
+    path("month/<int:month>/<int:year>", views.month_report, name="month_report"),
     path("report_pdf/<int:pk>", views.report_pdf, name="report_pdf"),
+    path("send_pdf/<int:pk>", views.send_pdf, name="send_pdf"),
     path("event/<str:date>", views.event_date, name="date_request"),
     path("event/<int:month>/<int:year>", views.event_list, name="month_request"),
     path("admin/", admin.site.urls),
