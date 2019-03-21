@@ -215,7 +215,7 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         # login(request, user, backend="django.contrib.auth.backends.ModelBackend")
-        #The login function directly log's in the user without entering credentials
+        # The login function directly log's in the user without entering credentials
         # Dhairya Here you redirect to Login page and then to calender page ..
         # Http Response added only for testing purpose
         return HttpResponse("Sokcess")
