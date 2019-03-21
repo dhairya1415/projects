@@ -26,7 +26,7 @@ class EventSerializer(serializers.ModelSerializer):
             "expert_name",
             "description",
             "organizer",
-            "events"
+            "events",
         )
 
 
@@ -53,6 +53,7 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
             "image",
             "attendance",
         )
+
 
 class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(style={"input_type": "password"})

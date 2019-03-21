@@ -28,7 +28,7 @@ class Event(models.Model):
 
 
 class Report(models.Model):
-    event = models.OneToOneField(Event, related_name = 'events',on_delete=models.CASCADE)
+    event = models.OneToOneField(Event, related_name="events", on_delete=models.CASCADE)
     venue = models.CharField(max_length=256)
     number_of_participation = models.IntegerField()
     attendance = models.FileField()
@@ -37,6 +37,7 @@ class Report(models.Model):
 class Image(models.Model):
     image = models.ImageField()
     report = models.ForeignKey(Report, related_name="image", on_delete=models.CASCADE)
+
 
 #
 

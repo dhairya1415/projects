@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import *
 from .models import *
-from .utility import generate_csv,month_dict
+from .utility import generate_csv, month_dict
 import requests
 import json
 import pandas as pd
@@ -59,23 +59,27 @@ def event_list(request, month, year):
         serializer = EventSerializer(event, many=True)
         return Response(serializer.data)
 
-#Just use this url and it will downnload the pdf
+
+# Just use this url and it will downnload the pdf
 @api_view(["GET"])
 def report_pdf(request, pk):
     if request.method == "GET":
-        event = Event.objects.get(id = pk)
+        event = Event.objects.get(id=pk)
         name = event.name
         date = str(event.start)
         date = date[0:10]
-        response = HttpResponse(content_type='text/pdf')
-        filename="media/pdf/{}${}.pdf".format(name, date)
+        response = HttpResponse(content_type="text/pdf")
+        filename = "media/pdf/{}${}.pdf".format(name, date)
         download_name = "{}_Report.pdf".format(name)
-        dataset = open(filename,'r')
-        response = HttpResponse(dataset,content_type='text/pdf')
-        response['Content-Disposition'] = 'attachment; filename="{}"'.format(download_name)
+        dataset = open(filename, "r")
+        response = HttpResponse(dataset, content_type="text/pdf")
+        response["Content-Disposition"] = 'attachment; filename="{}"'.format(
+            download_name
+        )
         return response
 
-#Just use this url and it will downnload the pdf
+
+# Just use this url and it will downnload the pdf
 @api_view(["GET"])
 def month_report(request, month):
     """
@@ -86,22 +90,26 @@ def month_report(request, month):
         serializer = EventSerializer(event, many=True)
         r_data = list(serializer.data)
         month_name = month_dict[month]
-        filename = 'media/csv_month/{}.csv'.format(month_name)
+        filename = "media/csv_month/{}.csv".format(month_name)
         for item in r_data:
-            item['start']=item['start'][0:10]
-        start_date='2019-{}-01'.format(month)
-        end_date='2019-{}-31'.format(month)
-        dates = pd.date_range(start_date,end_date)
-        zf=pd.DataFrame(index=dates)
+            item["start"] = item["start"][0:10]
+        start_date = "2019-{}-01".format(month)
+        end_date = "2019-{}-31".format(month)
+        dates = pd.date_range(start_date, end_date)
+        zf = pd.DataFrame(index=dates)
         df = pd.DataFrame.from_dict(r_data)
         df.to_csv(filename)
-        nf = pd.read_csv(filename,index_col="start",parse_dates=True,na_values=['nan','NaN'])
-        nf = nf.drop(columns=[nf.columns[0],nf.columns[1]])
-        zf = zf.join(nf,how='inner')
+        nf = pd.read_csv(
+            filename, index_col="start", parse_dates=True, na_values=["nan", "NaN"]
+        )
+        nf = nf.drop(columns=[nf.columns[0], nf.columns[1]])
+        zf = zf.join(nf, how="inner")
         zf.to_csv(filename)
-        dataset = open(filename,'r')
-        response = HttpResponse(dataset,content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="{}_Report.csv"'.format(month_name)
+        dataset = open(filename, "r")
+        response = HttpResponse(dataset, content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="{}_Report.csv"'.format(
+            month_name
+        )
         return response
 
 
