@@ -27,7 +27,7 @@ class EventSerializer(serializers.ModelSerializer):
             "expert_name",
             "description",
             "organizer",
-            "report"
+            "report",
         )
 
 
@@ -55,6 +55,7 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
             "event_data",
             "venue",
             "number_of_participants",
+            "after_event_description",
             "image",
             "attendance",
         )

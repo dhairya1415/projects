@@ -30,6 +30,7 @@ class Event(models.Model):
 class Report(models.Model):
     event = models.OneToOneField(Event, related_name="report", on_delete=models.CASCADE)
     venue = models.CharField(max_length=256)
+    after_event_description = models.TextField(null=True, blank=True)
     number_of_participants = models.IntegerField()
     attendance = models.FileField()
 

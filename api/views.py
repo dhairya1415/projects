@@ -71,7 +71,6 @@ def report_pdf(request, pk):
         user_email = []
         for user in users:
             user_email.append(user.email)
-
         date = date[0:10]
         response = HttpResponse(content_type="text/pdf")
         filename = "media/pdf/{}${}.pdf".format(name, date)
@@ -81,7 +80,6 @@ def report_pdf(request, pk):
         response["Content-Disposition"] = 'attachment; filename="{}"'.format(
             download_name
         )
-
         # Send mail on click of download button
         mail_subject = "Report of " + name
         message = "A pdf of the " + name + "report is sent, Please go through it once."
@@ -169,10 +167,7 @@ class ImageViewSet(viewsets.ModelViewSet):
 
         report_id = serializer.data["report"]
         report = Report.objects.get(pk=report_id)
-        event_id = report.event
-        print(event_id)
-        #event = Event.objects.get(pk=event_id)
-        event = event_id
+        event = report.event
         serializer_context = {
             'request': request,
         }
