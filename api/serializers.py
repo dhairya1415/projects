@@ -39,6 +39,7 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
     image = serializers.HyperlinkedRelatedField(
         many=True, view_name="image-detail", read_only=True
     )
+    event = EventSerializer(read_only=True)
 
     class Meta:
         model = Report
