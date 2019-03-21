@@ -48,7 +48,9 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
-
+"""
+Event data by month
+"""
 @api_view(["GET"])
 def event_list(request, month, year):
     """
@@ -60,7 +62,24 @@ def event_list(request, month, year):
         return Response(serializer.data)
 
 
-# Just use this url and it will downnload the pdf
+"""
+Event data by date
+"""
+@api_view(["GET"])
+def event_date(request, date):
+    """
+    List all Events according to date
+    """
+    if request.method == "GET":
+        event = Event.objects.filter(start__date=date)
+        serializer = EventSerializer(event, many=True)
+        return Response(serializer.data)
+
+
+
+"""
+Download PDF
+"""
 @api_view(["GET"])
 def report_pdf(request, pk):
     if request.method == "GET":
@@ -80,25 +99,19 @@ def report_pdf(request, pk):
         response["Content-Disposition"] = 'attachment; filename="{}"'.format(
             download_name
         )
-        # Send mail on click of download button
-        mail_subject = "Report of " + name
-        message = "A pdf of the " + name + "report is sent, Please go through it once."
-        to_email = user_email
-        email = EmailMessage(mail_subject, message, to=[to_email])
-        email.attach_file(filename)
-        email.send()
-
         return response
 
+"""
+Generate Month Report
+"""
 
-# Just use this url and it will downnload the pdf
 @api_view(["GET"])
-def month_report(request, month):
+def month_report(request, month, year):
     """
     List all events according to month and year
     """
     if request.method == "GET":
-        event = Event.objects.filter(start__month=month, start__year=2019)
+        event = Event.objects.filter(start__month=month, start__year=year)
         serializer = EventSerializer(event, many=True)
         r_data = list(serializer.data)
         month_name = month_dict[month]
@@ -124,16 +137,34 @@ def month_report(request, month):
         )
         return response
 
+"""
+Email PDF
+"""
 
 @api_view(["GET"])
-def event_date(request, date):
-    """
-    List all Events according to date
-    """
+def send_pdf(request, pk):
     if request.method == "GET":
-        event = Event.objects.filter(start__date=date)
-        serializer = EventSerializer(event, many=True)
-        return Response(serializer.data)
+        report = Report.objects.get(id=pk)
+        name = report.event.name
+        expert_name = report.event.expert_name
+        date = str(report.event.start)
+        users = User.objects.all()
+        user_email = []
+        for user in users:
+            user_email.append(user.email)
+        date = date[0:10]
+        response = HttpResponse(content_type="text/pdf")
+        filename = "media/pdf/{}${}.pdf".format(name, date)
+        # Send mail on click of download button
+        mail_subject = "Report of " + name + " created by " + expert_name
+        message = "A pdf of the " + name + " report is sent, Please go through it once."
+        to_email = user_email
+        email = EmailMessage(mail_subject, message, to=[to_email])
+        email.attach_file(filename)
+        email.send()
+        return response
+
+
 
 
 """
@@ -196,29 +227,6 @@ class SignUp(CreateAPIView):
 
 
 """
-User Login
-"""
-
-
-# class Login(APIView):
-#     serializer_class = LoginSerializer
-#
-#     def post(self, request):
-#         serializer = LoginSerializer(data=request.data)
-#         if serializer.is_valid():
-#             user = authenticate(
-#                 username=serializer.data.get("username"),
-#                 password=serializer.data.get("password"),
-#             )
-#             login(request, user,backend='django.contrib.auth.backends.ModelBackend')
-#             return Response(
-#                 serializer.data, status=status.HTTP_201_CREATED
-#             )
-#         else:
-#             return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
-
-
-"""
 User Logout
 """
 
@@ -234,6 +242,9 @@ class ReportViewSet(viewsets.ModelViewSet):
     serializer_class = ReportSerializer
 
 
+"""
+User Activation
+"""
 def activate(request, uidb64, token):
     try:
         user = User.objects.get(pk=uidb64)
@@ -242,15 +253,10 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        # login(request, user, backend="django.contrib.auth.backends.ModelBackend")
-        # The login function directly log's in the user without entering credentials
-        # Dhairya Here you redirect to Login page and then to calender page ..
-        # Http Response added only for testing purpose
-        return HttpResponse("Sokcess")
+        return HttpResponse("User Verification Successful")
 
     else:
-        # Http Response added only for testing purpose
-        return HttpResponse("Failure")
+        return HttpResponse("User verification failed")
 
 
 # Model signal on_save -> PDF
