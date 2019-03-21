@@ -13,6 +13,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
+    report = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
         model = Event
         fields = (
