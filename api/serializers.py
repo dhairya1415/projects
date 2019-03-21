@@ -27,7 +27,7 @@ class EventSerializer(serializers.ModelSerializer):
             "expert_name",
             "description",
             "organizer",
-            "report",
+            "report"
         )
 
 
@@ -45,6 +45,7 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
     )
     event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all())
     event_data = EventSerializer(read_only=True, source='event')
+
 
     class Meta:
         model = Report

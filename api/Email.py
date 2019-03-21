@@ -9,7 +9,6 @@ def create_mail(
     subject = "Event report for {} event. Report by {}".format(EventName, name)
     body = "Here is the report for the event {} on {}".format(EventName, EventDate)
     to = RECIPIENTS
-
     email = EmailMessage(subject=subject, body=body, to=to)
     return email
 
