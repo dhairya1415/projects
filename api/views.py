@@ -59,6 +59,7 @@ def event_list(request, month, year):
         serializer = EventSerializer(event, many=True)
         return Response(serializer.data)
 
+#Just use this url and it will downnload the pdf
 @api_view(["GET"])
 def report_pdf(request, pk):
     if request.method == "GET":
@@ -74,6 +75,7 @@ def report_pdf(request, pk):
         response['Content-Disposition'] = 'attachment; filename="{}"'.format(download_name)
         return response
 
+#Just use this url and it will downnload the pdf
 @api_view(["GET"])
 def month_report(request, month):
     """
