@@ -1,0 +1,2 @@
+,id,name,start,end,allDay,department,expert_name,description,organizer,report,event,venue,number_of_participants,after_event_description,image,attendance
+0,1,ACM-HACKATHON,2019-05-10T07:00:00Z,2019-05-11T10:00:00Z,True,COMPS,Preet Shah,24 hours hackathon,Preet Shah,1,1,Vile Parle,20,,['http://127.0.0.1:8000/media/dad_--.jpeg'],http://127.0.0.1:8000/media/coa.docx
