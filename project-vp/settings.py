@@ -76,8 +76,6 @@ MIDDLEWARE = [
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-APPEND_SLASH = False
-
 ROOT_URLCONF = "project-vp.urls"
 
 AUTH_USER_MODEL = "api.User"
