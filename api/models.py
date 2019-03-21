@@ -10,10 +10,6 @@ class User(AbstractUser):
     )
 
 
-# department
-# Amogh's part
-
-
 class Event(models.Model):
     name = models.CharField(max_length=128)
     start = models.DateTimeField()
@@ -26,6 +22,9 @@ class Event(models.Model):
     description = models.TextField(null=True, blank=True)
     organizer = models.TextField(null=True, blank=True)
 
+    def __str__(self):
+        return "{} : {}".format(self.pk, self.name)
+
 
 class Report(models.Model):
     event = models.OneToOneField(Event, related_name="report", on_delete=models.CASCADE)
@@ -34,13 +33,14 @@ class Report(models.Model):
     number_of_participants = models.IntegerField()
     attendance = models.FileField()
 
+    def __str__(self):
+        return self.event.__str__()
+
 
 class Image(models.Model):
     image = models.ImageField()
     report = models.ForeignKey(Report, related_name="image", on_delete=models.CASCADE)
 
-
-#
 
 # Connect model Event to Model User one event many users#
 # The Report part will take place in 3 steps
