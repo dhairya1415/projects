@@ -63,9 +63,9 @@ def event_list(request, month, year):
 @api_view(["GET"])
 def report_pdf(request, pk):
     if request.method == "GET":
-        event = Event.objects.get(id=pk)
-        name = event.name
-        date = str(event.start)
+        report = Report.objects.get(id=pk)
+        name = report.event.name
+        date = str(report.event.start)
         date = date[0:10]
         response = HttpResponse(content_type="text/pdf")
         filename = "media/pdf/{}${}.pdf".format(name, date)
@@ -155,11 +155,15 @@ class ImageViewSet(viewsets.ModelViewSet):
         report_id = serializer.data["report"]
         report = Report.objects.get(pk=report_id)
         event_id = report.event
-        event = Event.objects.get(pk=event_id)
-
-        report_json = ReportSerializer(report).data
+        print(event_id)
+        #event = Event.objects.get(pk=event_id)
+        event = event_id
+        serializer_context = {
+            'request': request,
+        }
+        report_json = ReportSerializer(report,context=serializer_context).data
         event_json = EventSerializer(event).data
-
+        print(report_json)
         generate_csv(report_json, event_json)
         headers = self.get_success_headers(serializer.data)
         return Response(
