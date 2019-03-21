@@ -8,13 +8,13 @@ from rest_framework.response import Response
 from .serializers import *
 from .models import *
 from .utility import generate_csv, month_dict
-import requests
 import json
 import pandas as pd
 import csv
 from django.http import FileResponse
 from wsgiref.util import FileWrapper
 import os
+from django.core.mail import EmailMessage
 from .Email import send_mail
 
 # Create your views here.
@@ -64,9 +64,14 @@ def event_list(request, month, year):
 @api_view(["GET"])
 def report_pdf(request, pk):
     if request.method == "GET":
-        event = Event.objects.get(id=pk)
-        name = event.name
-        date = str(event.start)
+        users = User.objects.all()
+        user_email = []
+        for user in users:
+            user_email.append(user.email)
+
+        report = Report.objects.get(id=pk)
+        name = report.event.name
+        date = str(report.event.start)
         date = date[0:10]
         response = HttpResponse(content_type="text/pdf")
         filename = "media/pdf/{}${}.pdf".format(name, date)
@@ -76,6 +81,14 @@ def report_pdf(request, pk):
         response["Content-Disposition"] = 'attachment; filename="{}"'.format(
             download_name
         )
+        # Send mail on click of download button
+        mail_subject = "Report of " + event.name
+        message = "A pdf of the " + event.name + "report is sent, Please go through it once."
+        to_email = user_email
+        email = EmailMessage(mail_subject, message, to=[to_email])
+        email.attach_file(filename)
+        email.send()
+
         return response
 
 
@@ -152,11 +165,16 @@ class ImageViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        report_api = requests.get(serializer.data["report"])
-        report_data = report_api.json()
-        event_api = requests.get(report_data["event"])
-        event_data = event_api.json()
-        generate_csv(report_data, event_data)
+
+        report_id = serializer.data["report"]
+        report = Report.objects.get(pk=report_id)
+        event_id = report.event.id
+        event = Event.objects.get(pk=event_id)
+
+        report_json = ReportSerializer(report).data
+        event_json = EventSerializer(event).data
+
+        generate_csv(report_json, event_json)
         headers = self.get_success_headers(serializer.data)
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers

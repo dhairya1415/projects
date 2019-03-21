@@ -2,6 +2,7 @@ import requests
 import json
 import pandas as pd
 from pdf_generation.task import import_data
+import json
 
 month_dict = [
     "months",
@@ -21,8 +22,10 @@ month_dict = [
 
 
 def generate_csv(report_data, event_data):
+    report_data = json.loads(report_data)[0]
+    event_data = json.loads(event_data)[0]
     df = pd.DataFrame.from_dict(report_data)
-    pf = pd.DataFrame.from_dict([event_data])
+    pf = pd.DataFrame.from_dict(event_data)
     y = []
     for i in range(len(report_data["image"])):
         z = requests.get(report_data["image"][i])

@@ -32,6 +32,8 @@ class EventSerializer(serializers.ModelSerializer):
 
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
+    report = serializers.PrimaryKeyRelatedField(queryset=Report.objects.all())
+
     class Meta:
         model = Image
         fields = "__all__"
