@@ -171,7 +171,7 @@ def activate(request, uidb64, token):
         #The login function directly log's in the user without entering credentials
         # Dhairya Here you redirect to Login page and then to calender page ..
         # Http Response added only for testing purpose
-        return HttpResponse("Sokcess")
+        return HttpResponseRedirect('http://localhost:3000/login')
 
     else:
         # Http Response added only for testing purpose
