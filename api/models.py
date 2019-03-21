@@ -22,9 +22,9 @@ class Event(models.Model):
     department = models.CharField(
         max_length=6, choices=choices.DEPARTMENT, default="COMPS"
     )
-    expert_name = models.CharField(max_length=256)
-    description = models.TextField()
-    organizer = models.TextField()
+    expert_name = models.CharField(max_length=256, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    organizer = models.TextField(null=True, blank=True)
 
 
 class Report(models.Model):
