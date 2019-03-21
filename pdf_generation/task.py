@@ -10,7 +10,7 @@ def import_data(data_file):
     df = pd.read_csv(data_file)
     event_name = df["name"][0]
     event_venue = df["venue"][0]
-    no_of_participants = df["number_of_participation"][0]
+    no_of_participants = df["number_of_participants"][0]
     event_department = df["department"][0]
     image = df["image"][0]
     # replace_fields = ["[","]",'"',"'"]
