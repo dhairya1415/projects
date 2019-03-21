@@ -14,6 +14,7 @@ import csv
 from django.http import FileResponse
 from wsgiref.util import FileWrapper
 import os
+from django.core.mail import EmailMessage
 from .Email import send_mail
 
 # Create your views here.
@@ -66,6 +67,11 @@ def report_pdf(request, pk):
         report = Report.objects.get(id=pk)
         name = report.event.name
         date = str(report.event.start)
+        users = User.objects.all()
+        user_email = []
+        for user in users:
+            user_email.append(user.email)
+
         date = date[0:10]
         response = HttpResponse(content_type="text/pdf")
         filename = "media/pdf/{}${}.pdf".format(name, date)
@@ -75,6 +81,15 @@ def report_pdf(request, pk):
         response["Content-Disposition"] = 'attachment; filename="{}"'.format(
             download_name
         )
+
+        # Send mail on click of download button
+        mail_subject = "Report of " + event.name
+        message = "A pdf of the " + event.name + "report is sent, Please go through it once."
+        to_email = user_email
+        email = EmailMessage(mail_subject, message, to=[to_email])
+        email.attach_file(filename)
+        email.send()
+
         return response
 
 
