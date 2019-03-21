@@ -13,7 +13,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    # report = ReportSerializer(many = False, read_only = True) This thing displays reports data in event
+    report = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
         model = Event
         fields = (
@@ -26,11 +27,13 @@ class EventSerializer(serializers.ModelSerializer):
             "expert_name",
             "description",
             "organizer",
-            "events",
+            "report"
         )
 
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
+    report = serializers.PrimaryKeyRelatedField(queryset=Report.objects.all())
+
     class Meta:
         model = Image
         fields = "__all__"
@@ -40,16 +43,18 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
     image = serializers.HyperlinkedRelatedField(
         many=True, view_name="image-detail", read_only=True
     )
+    event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all())
+    event_data = EventSerializer(read_only=True, source='event')
 
-    # events = EventSerializer(many = False , read_only = True)
 
     class Meta:
         model = Report
         fields = (
             "id",
             "event",
+            "event_data",
             "venue",
-            "number_of_participation",
+            "number_of_participants",
             "image",
             "attendance",
         )

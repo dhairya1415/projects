@@ -8,7 +8,6 @@ from rest_framework.response import Response
 from .serializers import *
 from .models import *
 from .utility import generate_csv, month_dict
-import requests
 import json
 import pandas as pd
 import csv
@@ -119,7 +118,7 @@ def event_date(request, date):
     List all Events according to date
     """
     if request.method == "GET":
-        event = Event.objects.filter(start=date)
+        event = Event.objects.filter(start__date=date)
         serializer = EventSerializer(event, many=True)
         return Response(serializer.data)
 
@@ -152,11 +151,16 @@ class ImageViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        report_api = requests.get(serializer.data["report"])
-        report_data = report_api.json()
-        event_api = requests.get(report_data["event"])
-        event_data = event_api.json()
-        generate_csv(report_data, event_data)
+
+        report_id = serializer.data["report"]
+        report = Report.objects.get(pk=report_id)
+        event_id = report.event
+        event = Event.objects.get(pk=event_id)
+
+        report_json = ReportSerializer(report).data
+        event_json = EventSerializer(event).data
+
+        generate_csv(report_json, event_json)
         headers = self.get_success_headers(serializer.data)
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
