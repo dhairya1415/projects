@@ -22,7 +22,7 @@ month_dict = [
 
 
 def generate_csv(report_data, event_data):
-    report_data["event_data"]= "Not required"
+    report_data["event_data"] = "Not required"
     df = pd.DataFrame.from_dict(report_data)
     pf = pd.DataFrame.from_dict([event_data])
     y = []
@@ -31,9 +31,9 @@ def generate_csv(report_data, event_data):
         z = z.json()
         y.append(z["image"])
     df["image"][0] = y
-    df = df.drop(["event_data"],1)
+    df = df.drop(["event_data"], 1)
     df = df.drop(range(1, len(report_data["image"])))
-    yf = pf.merge(df,how='outer')
+    yf = pf.merge(df, how="outer")
     yf.to_csv("media/csv/{}.csv".format(event_data["name"]))
     file = "media/csv/{}.csv".format(event_data["name"])
     import_data(file)

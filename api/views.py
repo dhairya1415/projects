@@ -48,9 +48,12 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
+
 """
 Event data by month
 """
+
+
 @api_view(["GET"])
 def event_list(request, month, year):
     """
@@ -65,6 +68,8 @@ def event_list(request, month, year):
 """
 Event data by date
 """
+
+
 @api_view(["GET"])
 def event_date(request, date):
     """
@@ -76,10 +81,11 @@ def event_date(request, date):
         return Response(serializer.data)
 
 
-
 """
 Download PDF
 """
+
+
 @api_view(["GET"])
 def report_pdf(request, pk):
     if request.method == "GET":
@@ -101,9 +107,11 @@ def report_pdf(request, pk):
         )
         return response
 
+
 """
 Generate Month Report
 """
+
 
 @api_view(["GET"])
 def month_report(request, month, year):
@@ -137,9 +145,11 @@ def month_report(request, month, year):
         )
         return response
 
+
 """
 Email PDF
 """
+
 
 @api_view(["GET"])
 def send_pdf(request, pk):
@@ -163,8 +173,6 @@ def send_pdf(request, pk):
         email.attach_file(filename)
         email.send()
         return response
-
-
 
 
 """
@@ -199,10 +207,8 @@ class ImageViewSet(viewsets.ModelViewSet):
         report_id = serializer.data["report"]
         report = Report.objects.get(pk=report_id)
         event = report.event
-        serializer_context = {
-            'request': request,
-        }
-        report_json = ReportSerializer(report,context=serializer_context).data
+        serializer_context = {"request": request}
+        report_json = ReportSerializer(report, context=serializer_context).data
         event_json = EventSerializer(event).data
         print(report_json)
         generate_csv(report_json, event_json)
@@ -245,6 +251,8 @@ class ReportViewSet(viewsets.ModelViewSet):
 """
 User Activation
 """
+
+
 def activate(request, uidb64, token):
     try:
         user = User.objects.get(pk=uidb64)
