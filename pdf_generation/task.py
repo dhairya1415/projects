@@ -6,17 +6,20 @@ import csv
 import pandas as pd
 
 
+data_file = 'data.csv'
+
 def import_data(data_file):
     df = pd.read_csv(data_file)
-    event_name = df["name"][0]
-    event_venue = df["venue"][0]
-    no_of_participants = df["number_of_participants"][0]
     event_department = df["department"][0]
+    event_description = df["description"][0]
+    event_date_end = df["end"][0]
+    expert_name = df["expert_name"][0]
+    event_name = df["name"][0]
+    event_organizer = df["organizer"][0]
+    event_date_start = df["start"][0]
+    event_venue = df["venue"][0]
+    no_of_participants = df["number_of_participation"][0]
     image = df["image"][0]
-    # replace_fields = ["[","]",'"',"'"]
-    # for string in replace_fields:
-    #     image = image.replace(string,"")
-    # test the above changes
     image = image.replace("[", "")
     image = image.replace("]", "")
     image = image.replace('"', "")
@@ -24,56 +27,73 @@ def import_data(data_file):
     image = image.replace("'", "")
     image = image.replace("'", "")
     image = image.split(",")
-    event_description = df["description"][0]
-    event_date = df["start"][0]
-    file_date = event_date[0:10]
+    length = len(image)
+    x = []
+    for i in range(0, length, 2):
+        x.append(image[i:i+2])
+    
+    file_date = event_date_start[0:10]
     pdf_file_name = event_name + "$" + file_date + ".pdf"
+
     generate_pdf(
+        event_department,
+        event_description,
+        event_date_end,
+        expert_name,
         event_name,
+        event_organizer,
+        event_date_start,
         event_venue,
         no_of_participants,
-        event_department,
-        image,
-        event_description,
-        event_date,
-        pdf_file_name,
+        x,
+        file_date,
+        pdf_file_name
     )
 
 
 def generate_pdf(
+    event_department,
+    event_description,
+    event_date_end,
+    expert_name,
     event_name,
+    event_organizer,
+    event_date_start,
     event_venue,
     no_of_participants,
-    event_department,
-    image,
-    event_description,
-    event_date,
-    pdf_file_name,
+    x,
+    file_date,
+    pdf_file_name
 ):
     c = canvas.Canvas("media/pdf/{}".format(pdf_file_name), pagesize=portrait(A4))
-    c.setFont("Helvetica-Bold", 30, leading=None)
-    c.drawCentredString(4.135 * inch, 11.19 * inch, "Report for the Event:")
-    c.setFont("Helvetica", 20, leading=None)
-    c.drawCentredString(4.135 * inch, 10.69 * inch, event_name + " | " + event_date)
-    c.drawCentredString(
-        4.135 * inch,
-        10.50 * inch,
-        "-----------------------------------------------------------",
-    )
-    c.setFont("Helvetica", 15, leading=None)
-    c.drawString(
-        0.4 * inch, 9.69 * inch, "Event Department: {}".format(event_department)
-    )
-    c.drawString(0.4 * inch, 9.19 * inch, "Event Venue: {}".format(event_venue))
-    c.drawString(
-        0.4 * inch, 8.69 * inch, "No. of participants: {}".format(no_of_participants)
-    )
-    c.drawString(0.4 * inch, 8.19 * inch, "Event Description:")
+    # c = canvas.Canvas(pdf_file_name, pagesize=portrait(A4))
+    
+    c.setFont("Helvetica-Bold", 25, leading=None)
+    c.drawCentredString(10.5 * cm, 25.2 * cm, "A report on {}".format(event_name))
+
     c.setFont("Helvetica", 13, leading=None)
-    c.drawString(0.4 * inch, 7.9 * inch, event_description)
-    c.setFont("Helvetica", 15, leading=None)
-    c.drawString(6 * inch, 2 * inch, "Signature")
-    c.drawString(6.25 * inch, 1.7 * inch, "(xyz)")
+    c.drawString(2.84 * cm, 23.2 * cm, "Delivered by: {}".format(expert_name))
+
+    c.setFont("Helvetica", 13, leading=None)
+    c.drawString(2.84 * cm, 22.2 * cm, "Organized by: {}".format(event_department))
+
+    c.setFont("Helvetica", 13, leading=None)
+    c.drawString(2.84 * cm, 21.2 * cm, "Date: {}".format(file_date))
+
+    c.setFont("Helvetica", 13, leading=None)
+    c.drawString(2.84 * cm, 20.2 * cm, "Venue: {}".format(event_venue))
+
+    c.setFont("Helvetica", 13, leading=None)
+    c.drawString(2.84 * cm, 19.2 * cm, "No. of particpants: {}".format(no_of_participants))
+
+    c.setFont("Helvetica", 13, leading=None)
+    c.drawString(2.84 * cm, 18.2 * cm, "Description:")
+
+    c.setFont("Helvetica", 10, leading=None)
+    c.drawString(2.84 * cm, 17.5 * cm, event_description)
+
+    c.setFont("Helvetica-Bold", 13, leading=None)
+    c.drawString(13.1 * cm, 4.5 * cm, "HoD " + "({}".format(event_department[:-41]) + ".Dept)")
 
     # textobject = c.beginText()
     # textobject.setTextOrigin(0.2*inch, 7.69*inch)
@@ -82,15 +102,18 @@ def generate_pdf(
     # c.drawText(textobject)
 
     c.showPage()
-    c.setFont("Helvetica", 15, leading=None)
-    c.drawString(0.4 * inch, 11.19 * inch, "Images:")
-    v_gap = 8.19
-    for item in image:
-        if v_gap > 0:
-            c.drawImage(item, 0.4 * inch, v_gap * inch, width=200, height=200)
-            v_gap -= 3
-    c.showPage()
+    for item in x:
+        v_gap = 7.09
+        for j in item:
+            if v_gap > 0:
+                c.drawImage(j, 1.35 * inch, v_gap * inch, width=400, height=200)
+                v_gap -= 4
+        c.showPage()
     c.save()
 
+if __name__ == "__main__":
+    import_data(data_file)
 
-# A4 dimensions: 8.27 × 11.69 inches
+# A4 dimensions: 
+# 8.27 × 11.69 inches
+# 21.0 x 29.7cm
