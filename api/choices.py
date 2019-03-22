@@ -11,14 +11,14 @@ DEPARTMENT = (
 )
 
 department = {
-"EXTC": "Electronics & Communication ",
-"MECH": "Mechanical ",
-"COMPS": "Computer ",
-"IT": "IT ",
-"ETRX": "Electronics ",
-"CHEM": "Chemical ",
-"BIOMED": "Bio-medical ",
-"PROD": "Production ",
+"EXTC": "Electronics & Telecommunication Engineering Department, D.J. Sanghvi COE",
+"MECH": "Mechanical Engineering Department, D.J. Sanghvi COE",
+"COMPS": "Computer Engineering Department, D.J. Sanghvi COE",
+"IT": "Information Technology Engineering Department, D.J. Sanghvi COE",
+"ETRX": "Electronics Engineering Department, D.J. Sanghvi COE",
+"CHEM": "Chemical Engineering Department, D.J. Sanghvi COE",
+"BIOMED": "Bio-medical Engineering Department, D.J. Sanghvi COE",
+"PROD": "Production Engineering Department, D.J. Sanghvi COE",
 "OTHER": "Other/ No department",
 }
 
