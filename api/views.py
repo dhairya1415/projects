@@ -169,7 +169,6 @@ def send_pdf(request, pk):
         mail_subject = "Report of " + name + " created by " + expert_name
         message = "A pdf of the " + name + " report is sent, Please go through it once."
         to_email = user_email
-        print(to_email)
         for i in range(0,len(to_email)):
             to = to_email[i]
             email = EmailMessage(mail_subject, message, to=[to])
