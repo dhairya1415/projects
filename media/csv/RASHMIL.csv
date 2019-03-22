@@ -1,0 +1,2 @@
+,id,name,start,end,allDay,department,expert_name,description,organizer,report,event,venue,number_of_participants,after_event_description,image,attendance
+0,10,RASHMIL,2019-03-14T18:30:00Z,2019-03-15T18:30:00Z,False,OTHER,SJDKNSJKNDS,ASDKJDASKJDK,ASJKDNJKASDJK,9,10,ASJKDASJD,12,,['http://127.0.0.1:8000/media/4c2de5df7ec88fb93d5f89cd68600ddd_2_7uyji2e.jpg'],http://127.0.0.1:8000/media/8780.jpg_wh1200_0IVT7Nb.jpg
