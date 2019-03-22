@@ -4,13 +4,14 @@ from reportlab.platypus import Image
 from reportlab.lib.units import inch, cm
 import csv
 import pandas as pd
-
+from api.choices import department
 
 data_file = 'data.csv'
 
 def import_data(data_file):
     df = pd.read_csv(data_file)
     event_department = df["department"][0]
+    event_department = department[event_department]
     event_description = df["description"][0]
     event_date_end = df["end"][0]
     expert_name = df["expert_name"][0]
@@ -18,7 +19,7 @@ def import_data(data_file):
     event_organizer = df["organizer"][0]
     event_date_start = df["start"][0]
     event_venue = df["venue"][0]
-    no_of_participants = df["number_of_participation"][0]
+    no_of_participants = df["number_of_participants"][0]
     image = df["image"][0]
     image = image.replace("[", "")
     image = image.replace("]", "")
@@ -31,7 +32,7 @@ def import_data(data_file):
     x = []
     for i in range(0, length, 2):
         x.append(image[i:i+2])
-    
+
     file_date = event_date_start[0:10]
     pdf_file_name = event_name + "$" + file_date + ".pdf"
 
@@ -67,7 +68,7 @@ def generate_pdf(
 ):
     c = canvas.Canvas("media/pdf/{}".format(pdf_file_name), pagesize=portrait(A4))
     # c = canvas.Canvas(pdf_file_name, pagesize=portrait(A4))
-    
+
     c.setFont("Helvetica-Bold", 25, leading=None)
     c.drawCentredString(10.5 * cm, 25.2 * cm, "A report on {}".format(event_name))
 
@@ -114,6 +115,6 @@ def generate_pdf(
 if __name__ == "__main__":
     import_data(data_file)
 
-# A4 dimensions: 
+# A4 dimensions:
 # 8.27 × 11.69 inches
 # 21.0 x 29.7cm
