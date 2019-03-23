@@ -23,7 +23,6 @@ from .Email import send_mail
 User Data API
 """
 
-
 @api_view(["GET"])
 def user_list(request, first):
     """
@@ -44,7 +43,6 @@ class UserViewSet(viewsets.ModelViewSet):
 Event Data API
 """
 
-
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
@@ -63,15 +61,12 @@ def event_list(request, month, year):
     if request.method == "GET":
         dates = Dates.objects.filter(start__month=month, start__year=year)
         serializer = DatesSerializer(dates, many=True)
-        # event = Event.objects.filter(start__month=month, start__year=year)
-        # serializer = EventSerializer(event, many=True)
         return Response(serializer.data)
 
 
 """
 Event data by date
 """
-
 
 @api_view(["GET"])
 def event_date(request, date):
@@ -199,8 +194,6 @@ def send_pdf(request, pk):
 """
 Report API DATA
 """
-
-
 class ReportViewSet(viewsets.ModelViewSet):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
@@ -287,7 +280,6 @@ class ReportViewSet(viewsets.ModelViewSet):
 """
 User Activation
 """
-
 
 def activate(request, uidb64, token):
     try:

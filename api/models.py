@@ -9,7 +9,6 @@ class User(AbstractUser):
         max_length=6, choices=choices.DEPARTMENT, default="COMPS"
     )
 
-
 class Event(models.Model):
     name = models.CharField(max_length=128)
     allDay = models.BooleanField(default=False)
@@ -26,7 +25,7 @@ class Department(models.Model):
     department = models.CharField(
         max_length=6, choices=choices.DEPARTMENT, default="COMPS"
     )
-    
+
 
 class Dates(models.Model):
     start = models.DateTimeField()
