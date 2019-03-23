@@ -155,25 +155,30 @@ Email PDF
 def send_pdf(request, pk):
     if request.method == "GET":
         report = Report.objects.get(id=pk)
+        event_obj = report.event
         name = report.event.name
-        expert_name = report.event.expert_name
         date = str(report.event.start)
-        users = User.objects.all()
-        user_email = []
-        for user in users:
-            user_email.append(user.email)
         date = date[0:10]
+        filename = "{}${}.pdf".format(name,date)
         response = HttpResponse(content_type="text/pdf")
-        filename = "media/pdf/{}${}.pdf".format(name, date)
-        # Send mail on click of download button
-        mail_subject = "Report of " + name + " created by " + expert_name
-        message = "A pdf of the " + name + " report is sent, Please go through it once."
-        to_email = user_email
-        for i in range(0,len(to_email)):
-            to = to_email[i]
-            email = EmailMessage(mail_subject, message, to=[to])
-            email.attach_file(filename)
-            email.send()
+        teacher_name = request.user.first_name + " " + request.user.last_name
+        # expert_name = report.event.expert_name
+        # date = str(report.event.start)
+        # users = User.objects.all()
+        # user_email = []
+        # for user in users:
+        #     user_email.append(user.email)
+        # date = date[0:10]
+        # response = HttpResponse(content_type="text/pdf")
+        # filename = "media/pdf/{}${}.pdf".format(name, date)
+        # # Send mail on click of download button
+        # mail_subject = "Report of " + name + " created by " + expert_name
+        # message = "A pdf of the " + name + " report is sent, Please go through it once."
+        # to_email = user_email
+        # email = EmailMessage(mail_subject, message, to=to_email)
+        # email.attach_file(filename)
+        # email.send()
+        send_mail(filename, teacher_name, event_obj)
 
         return response
 
