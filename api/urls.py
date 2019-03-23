@@ -25,6 +25,7 @@ router.register("event", views.EventViewSet)
 router.register("report", views.ReportViewSet)
 router.register("image", views.ImageViewSet)
 router.register("department", views.DepartmentViewSet)
+router.register("dates", views.DatesViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),

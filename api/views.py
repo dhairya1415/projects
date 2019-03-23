@@ -60,8 +60,10 @@ def event_list(request, month, year):
     List all events according to month and year
     """
     if request.method == "GET":
-        event = Event.objects.filter(start__month=month, start__year=year)
-        serializer = EventSerializer(event, many=True)
+        dates = Dates.objects.filter(start__month=month, start__year=year)
+        serializer = DatesSerializer(dates, many=True)
+        # event = Event.objects.filter(start__month=month, start__year=year)
+        # serializer = EventSerializer(event, many=True)
         return Response(serializer.data)
 
 
@@ -243,6 +245,11 @@ User Logout
 class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
+
+
+class DatesViewSet(viewsets.ModelViewSet):
+    queryset = Dates.objects.all()
+    serializer_class = DatesSerializer
 
 
 # class Logout(APIView):
