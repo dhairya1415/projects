@@ -230,6 +230,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         'event_dict':event_json,
         'request': request,
         }
+
         render_to_file('pdf.html',params,filename)
         headers = self.get_success_headers(serializer.data)
         return Response(
