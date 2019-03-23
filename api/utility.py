@@ -59,7 +59,4 @@ def get_dates(event_obj):
     
     start_date = str(dates[0].start)
     start_date = start_date[0:10]
-    end_date = str(dates[-1].end)
-    end_date = end_date[0:10]
-    date = start_date + "$" + end_date
-    return date 
+    return start_date 
