@@ -224,7 +224,12 @@ class ImageViewSet(viewsets.ModelViewSet):
         serializer_context = {"request": request}
         report_json = ReportSerializer(report, context=serializer_context).data
         event_json = EventSerializer(event).data
-        filename = event_json['name']+'$'+event_json["dates"][0]["start"][0:10]
+        for items in event_json["dates"]:
+            items["start"] = items["start"][0:10]
+            items["end"] = items["end"][0:10]
+        dates_len = len(event_json["dates"])
+        filename = event_json['name']+'$'+event_json["dates"][0]["start"]
+        event_json["dates"] = {'start':event_json["dates"][0]["start"],'end':event_json["dates"][dates_len-1]["end"]}
         params ={
         'report_dict':report_json,
         'event_dict':event_json,
