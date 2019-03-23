@@ -15,7 +15,7 @@
             }
         </style> 
     <div class="container">
-        <img src="{% static 'images/letterhead.png' %}" alt="OOPS" style="width: 50%; display: block; margin-right: auto; margin-left: auto;">
+        <img src={% static 'images/letterhead.png' %} alt="OOPS" style="width: 50%; display: block; margin-right: auto; margin-left: auto;">
         <br>
         <br>
         <br>
@@ -27,25 +27,23 @@
         <h4><b>Organized by:</b></h4>
         <ul>
             {% for item in event_dict.departments %}
-            <li><h5>item.department</h5></li>
+                <li><h5>{{ item.department }}</h5></li>
             {% endfor %}
         </ul>
-        <h4><b>Date:</b> {{ event_date }}</h4>
-        <h4><b>Time:</b> {{ event_time }}</h4>
-        <h4><b>Venue:</b> {{ event_venue }}</h4>
+        <h4><b>Date:</b> {{ event_dict.dates.start }} to {{ event_dict.dates.end }}</h4>
+        <!-- <h4><b>Time:</b> {{ event_time }}</h4> -->
+        <h4><b>Venue:</b> {{ event_dict.venue }}</h4>
+        <h4><b>Submitted by:</b> {{ event_dict.organizer }}</h4>
+        <h4><b>No. of participants:</b> {{ report_dict.number_of_participants }}</h4>
+        <h4><b>Event Description:</b></h4>
+        <p class="text-justify">{{ event_dict.description }}</p>
+        <h4><b>After Event Description:</b></h4>
+        <p class="text-justify">{{ report_dict.after_event_description }}</p>
         <br>
-        <h4><b>Description:</b></h4>
-        <p class="text-justify">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem explicabo molestias vel nesciunt mollitia? Magni sed eius, nihil officia sunt vero autem expedita cum voluptatibus perspiciatis enim officiis animi possimus! Lorem ipsum dolor, sit amet consectetur adipisicing elit. Explicabo cumque nam quibusdam vero? Doloremque, consequatur ratione quas iure, saepe magnam ad sapiente reiciendis ut dolorum aperiam expedita accusantium excepturi aut! Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi eaque magnam commodi numquam? Quos dignissimos suscipit eum, illum iure labore recusandae illo nostrum minima quam cumque, voluptates ut est molestias. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Delectus sed quaerat quia. Qui accusamus vero ad corporis magnam tempora repellat minus, ducimus obcaecati consequatur inventore facilis dolor sapiente sunt officia! Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio officia asperiores iusto accusantium iste nemo ipsam numquam deleniti ratione cum aliquid architecto libero nulla, expedita necessitatibus corrupti quo doloribus. Quo. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odio illum earum autem, accusamus fugit possimus porro delectus perferendis sapiente dicta iusto? Doloribus, sunt deleniti ut atque natus nihil cumque ex.</p>
-        <br>
-        <h4><b>Submitted by:</b></h4>
-        <ul>
-            <li><h5>Ram chutiya</h5></li>
-            <li><h5>Pranit bhadwa</h5></li>
-        </ul>
-        <div class="row">
-            <div class="col-sm-4">
-
-            </div>
+        <div class="container">
+            {% for item in report_dict.image %}
+                <img src={{ item }} alt="OOPS">
+            {% endfor %}
         </div>
     </div>
 </body>
