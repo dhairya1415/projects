@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Event, Report, Image, Department
+from .models import User, Event, Report, Image, Department, Dates
 from django.template.loader import render_to_string
 from .token import account_activation_token
 from django.core.mail import EmailMessage
@@ -17,11 +17,16 @@ class DepartmentSerializer(serializers.ModelSerializer):
         model = Department
         fields = "__all__"
 
+class DatesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dates
+        fields = "__all__"
+
 
 class EventSerializer(serializers.ModelSerializer):
     report = serializers.PrimaryKeyRelatedField(read_only=True)
     departments = DepartmentSerializer(read_only=True, many=True)
-
+    dates = DatesSerializer(read_only=True, many=True)
     class Meta:
         model = Event
         fields = (
@@ -33,6 +38,7 @@ class EventSerializer(serializers.ModelSerializer):
             "description",
             "organizer",
             "report",
+            "dates",
         )
 
 
