@@ -9,21 +9,28 @@ class User(AbstractUser):
         max_length=6, choices=choices.DEPARTMENT, default="COMPS"
     )
 
-
 class Event(models.Model):
     name = models.CharField(max_length=128)
-    start = models.DateTimeField()
-    end = models.DateTimeField()
     allDay = models.BooleanField(default=False)
-    department = models.CharField(
-        max_length=6, choices=choices.DEPARTMENT, default="COMPS"
-    )
     expert_name = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     organizer = models.TextField(null=True, blank=True)
+    creator_name = models.CharField(max_length = 256 ,null = True, blank = True)
 
     def __str__(self):
         return "{} : {}".format(self.pk, self.name)
+
+class Department(models.Model):
+    event = models.ForeignKey(Event, related_name="departments", on_delete=models.CASCADE)
+    department = models.CharField(
+        max_length=6, choices=choices.DEPARTMENT, default="COMPS"
+    )
+
+
+class Dates(models.Model):
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+    event = models.ForeignKey(Event, related_name="dates", on_delete=models.CASCADE)
 
 
 class Report(models.Model):

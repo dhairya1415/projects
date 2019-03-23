@@ -24,11 +24,14 @@ router = routers.DefaultRouter()
 router.register("event", views.EventViewSet)
 router.register("report", views.ReportViewSet)
 router.register("image", views.ImageViewSet)
+router.register("department", views.DepartmentViewSet)
+router.register("dates", views.DatesViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
     path("month/<int:month>/<int:year>", views.month_report, name="month_report"),
-    path("report_pdf/<int:pk>", views.report_pdf, name="report_pdf"),
+    path("report_pdf_donwload/<int:pk>", views.report_pdf, name="report_pdf_donwload"),
+    path("report_pdf_preview/<int:pk>", views.report_pdf, name="report_pdf_preview"),
     path("send_pdf/<int:pk>", views.send_pdf, name="send_pdf"),
     path("event/<str:date>", views.event_date, name="date_request"),
     path("event/<int:month>/<int:year>", views.event_list, name="month_request"),

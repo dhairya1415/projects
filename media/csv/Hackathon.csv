@@ -1,0 +1,2 @@
+,id,name,start,end,allDay,department,expert_name,description,organizer,report,event,venue,number_of_participants,after_event_description,image,attendance
+0,1,Hackathon,2019-03-03T18:30:00Z,2019-03-04T18:30:00Z,False,MECH,Preet Shah,24 hour hackathon,Preet Shah,1,1,6th Floor,50,,"['http://127.0.0.1:8000/media/home.jpg', 'http://127.0.0.1:8000/media/8780.jpg_wh1200.jpg']",http://127.0.0.1:8000/media/4c2de5df7ec88fb93d5f89cd68600ddd_2.jpg

@@ -12,7 +12,7 @@ class UserChangeForm(UserChangeForm):
 class UserAdmin(UserAdmin):
     form = UserChangeForm
 
-    fieldsets = UserAdmin.fieldsets + ((None, {"fields": ()}),)
+    fieldsets = UserAdmin.fieldsets + ((None, {"fields": ('department',)}),)
 
 
 admin.site.register(User, UserAdmin)
