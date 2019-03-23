@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Event, Report, Image
+from .models import User, Event, Report, Image, Department
 from django.template.loader import render_to_string
 from .token import account_activation_token
 from django.core.mail import EmailMessage
@@ -12,18 +12,23 @@ class UserSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class DepartmentSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Department
+        fields = "__all__"
+
+
 class EventSerializer(serializers.ModelSerializer):
     report = serializers.PrimaryKeyRelatedField(read_only=True)
+    departments = DepartmentSerializer(read_only=True, many=True)
 
     class Meta:
         model = Event
         fields = (
             "id",
             "name",
-            "start",
-            "end",
             "allDay",
-            "department",
+            "departments",
             "expert_name",
             "description",
             "organizer",

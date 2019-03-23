@@ -1,2 +1,0 @@
-,id,name,start,end,allDay,department,expert_name,description,organizer,report,event,venue,number_of_participants,after_event_description,image,attendance
-0,8,PREET,2019-03-18T18:30:00Z,2019-03-20T18:30:00Z,False,ETRX,SDJHJKSDHJKH,KASJDKSAJDJ,HASJDHJKSDHKHS,8,8,SHDJHJDSH,45,,['http://127.0.0.1:8000/media/70424089-crowdsourcing-icon_GeOY8y0.jpg'],http://127.0.0.1:8000/media/4c2de5df7ec88fb93d5f89cd68600ddd_2_yRC1R4a.jpg

@@ -1,0 +1,2 @@
+,id,name,start,end,allDay,department,expert_name,description,organizer,report,event,venue,number_of_participants,after_event_description,image,attendance
+0,3,Trinity,2019-03-26T04:59:00Z,2019-03-28T18:00:00Z,False,COMPS,Shaan,Cultural Event,Ram Sir,3,3,Seminar Hall,100,,"['http://127.0.0.1:8000/media/4c2de5df7ec88fb93d5f89cd68600ddd_2_dyzytab.jpg', 'http://127.0.0.1:8000/media/8780.jpg_wh1200_nktOtTh.jpg', 'http://127.0.0.1:8000/media/70424089-crowdsourcing-icon.jpg']",http://127.0.0.1:8000/media/coa.docx
