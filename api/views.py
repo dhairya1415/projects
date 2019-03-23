@@ -92,14 +92,14 @@ def report_pdf_download(request, pk):
     if request.method == "GET":
         report = Report.objects.get(id=pk)
         name = report.event.name
-        date = str(report.event.start)
+        #date = str(report.event.start)
         # users = User.objects.all()
         # user_email = []
         # for user in users:
         #     user_email.append(user.email)
-        date = date[0:10]
+        #date = date[0:10]
         response = HttpResponse(content_type="text/pdf")
-        filename = "media/pdf/{}${}.pdf".format(name, date)
+        filename = "media/pdf/{}$.pdf".format(name)
         download_name = "{}_Report.pdf".format(name)
         dataset = open(filename, "r")
         response = HttpResponse(dataset, content_type="text/pdf")
@@ -114,9 +114,9 @@ def report_pdf_preview(request, pk):
     if request.method == "GET":
         report = Report.objects.get(id=pk)
         name = report.event.name
-        date = str(report.event.start)
-        date = date[0:10]
-        filename = "media/pdf/{}${}.pdf".format(name, date)
+        #date = str(report.event.start)
+        #date = date[0:10]
+        filename = "media/pdf/{}$.pdf".format(name)
         dataset = open(filename, "r")
         response = HttpResponse(dataset, content_type="application/pdf")
         return response
@@ -219,6 +219,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         'event_dict':event_json,
         'request': request,
         }
+
         render_to_file('pdf.html',params,filename)
         headers = self.get_success_headers(serializer.data)
         return Response(
