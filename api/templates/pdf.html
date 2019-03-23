@@ -1,30 +1,34 @@
+<!DOCTYPE html>
+{% load staticfiles %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <title>Document</title>
 </head>
-<body>  
+<body> 
+        <style>
+            @page {
+            size: A4 portrait;
+            margin: 3cm;
+            }
+        </style> 
     <div class="container">
+        <img src="{% static 'images/letterhead.png' %}" alt="OOPS" style="width: 50%; display: block; margin-right: auto; margin-left: auto;">
         <br>
         <br>
         <br>
-        <br>
-        <br>
-        <h1 class="text-center">A report on {{ event_dict.event_name }}</h1>
+        <h1 style="text-align:center;">A report on "{{ event_dict.name }}"</h1>
         <hr>
         <br>
         <br>
-        <h4><b>Delivered by:</b> {{ expert_name }}</h4>
+        <h4><b>Delivered by:</b> {{ event_dict.expert_name }}</h4>
         <h4><b>Organized by:</b></h4>
         <ul>
-            <li><h5>Ram chutiya</h5></li>
-            <li><h5>Pranit bhadwa</h5></li>
+            {% for item in event_dict.departments %}
+            <li><h5>item.department</h5></li>
+            {% endfor %}
         </ul>
         <h4><b>Date:</b> {{ event_date }}</h4>
         <h4><b>Time:</b> {{ event_time }}</h4>
