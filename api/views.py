@@ -87,7 +87,7 @@ Download PDF
 
 
 @api_view(["GET"])
-def report_pdf_donwload(request, pk):
+def report_pdf_download(request, pk):
     if request.method == "GET":
         report = Report.objects.get(id=pk)
         name = report.event.name
