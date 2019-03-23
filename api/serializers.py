@@ -70,6 +70,14 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
             "attendance",
         )
 
+    # def validate(self, data):
+    #
+    #     event = data['event']
+    #     venue = data['venue']
+    #     val_event = Event.objects.filter(dates__start = )
+    #     if user_qs.exists():
+    #         raise ValidationError("This sap_id already registered.")
+    #     return data
 
 class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(style={"input_type": "password"})
