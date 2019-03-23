@@ -24,6 +24,7 @@ router = routers.DefaultRouter()
 router.register("event", views.EventViewSet)
 router.register("report", views.ReportViewSet)
 router.register("image", views.ImageViewSet)
+router.register("department", views.DepartmentViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),

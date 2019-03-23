@@ -1,2 +1,0 @@
-,id,name,start,end,allDay,department,expert_name,description,organizer,report,event,venue,number_of_participants,after_event_description,image,attendance
-0,4,CSI,2019-03-12T18:30:00Z,2019-03-13T18:30:00Z,False,EXTC,SDHSJDH,SAKJDKSLDJLKSDJ,SDJJHKJSDHFKJSH,4,4,DSJKHSJKDH,45,,['http://127.0.0.1:8000/media/home_GoQ7ifO.jpg'],http://127.0.0.1:8000/media/8780.jpg_wh1200.jpg

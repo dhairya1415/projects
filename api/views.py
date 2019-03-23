@@ -161,6 +161,7 @@ def send_pdf(request, pk):
         date = date[0:10]
         filename = "{}${}.pdf".format(name,date)
         response = HttpResponse(content_type="text/pdf")
+<<<<<<< HEAD
         teacher_name = request.user.first_name + " " + request.user.last_name
         # expert_name = report.event.expert_name
         # date = str(report.event.start)
@@ -179,6 +180,18 @@ def send_pdf(request, pk):
         # email.attach_file(filename)
         # email.send()
         send_mail(filename, teacher_name, event_obj)
+=======
+        filename = "media/pdf/{}${}.pdf".format(name, date)
+        # Send mail on click of download button
+        mail_subject = "Report of " + name + " created by " + expert_name
+        message = "A pdf of the " + name + " report is sent, Please go through it once."
+        to_email = user_email
+        for i in range(0, len(to_email)):
+            to = to_email[i]
+            email = EmailMessage(mail_subject, message, to=[to])
+            email.attach_file(filename)
+            email.send()
+>>>>>>> ecd913241267d2ae60a2d86cbdf96367dcf55364
 
         return response
 
@@ -212,14 +225,14 @@ class ImageViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
-        report_id = serializer.data["report"]
-        report = Report.objects.get(pk=report_id)
-        event = report.event
-        serializer_context = {"request": request}
-        report_json = ReportSerializer(report, context=serializer_context).data
-        event_json = EventSerializer(event).data
-        print(report_json)
-        generate_csv(report_json, event_json)
+        # report_id = serializer.data["report"]
+        # report = Report.objects.get(pk=report_id)
+        # event = report.event
+        # serializer_context = {"request": request}
+        # report_json = ReportSerializer(report, context=serializer_context).data
+        # event_json = EventSerializer(event).data
+        # print(report_json)
+        # generate_csv(report_json, event_json)
         headers = self.get_success_headers(serializer.data)
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
@@ -243,6 +256,11 @@ class SignUp(CreateAPIView):
 """
 User Logout
 """
+
+
+class DepartmentViewSet(viewsets.ModelViewSet):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
 
 
 # class Logout(APIView):

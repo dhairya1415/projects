@@ -36,16 +36,8 @@ SECRET_KEY = "wu^txkli_c4y-*$)ar20fyvzzu7a84r1axp8si3yt2ba911l2%"  # env('SECRET
 DEBUG = True  # env('DEBUG')
 
 ALLOWED_HOSTS = []
-
-# email settings
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "djsanghvinoreply@gmail.com"
-EMAIL_HOST_PASSWORD = "Unicode@123"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-
 # Application definition
+
 
 INSTALLED_APPS = [
     "api",
@@ -59,6 +51,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "djoser",
+    "multiselectfield",
 ]
 
 MIDDLEWARE = [
@@ -150,6 +143,7 @@ MEDIA_URL = "/media/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+# Authentication Settings
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": {},
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
@@ -166,3 +160,11 @@ DJOSER = {
     "SERIALIZERS": {},
     "TOKEN_MODEL": "rest_framework.authtoken.models.Token",
 }
+
+# email settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "djsanghvinoreply@gmail.com"
+EMAIL_HOST_PASSWORD = "Unicode@123"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
