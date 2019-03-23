@@ -7,12 +7,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import *
 from .models import *
-<<<<<<< HEAD
 from .utility import generate_csv, month_dict, get_dates
-=======
 from .render import render_to_file
 from .utility import generate_csv, month_dict
->>>>>>> c21925ea212e665e9d769b9bf887d8da64b349d4
 import json
 import pandas as pd
 import csv
@@ -91,7 +88,7 @@ Download PDF
 
 
 @api_view(["GET"])
-def report_pdf_donwload(request, pk):
+def report_pdf_download(request, pk):
     if request.method == "GET":
         report = Report.objects.get(id=pk)
         name = report.event.name
