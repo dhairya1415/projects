@@ -48,9 +48,18 @@ def get_recipients(event_obj):
     departments = Department.objects.filter(event=event_obj)
     recipients = []
     for department in departments:
-        users = Users.objects.filter(department=department)
+        users = User.objects.filter(department=department.department)
         for user in users:
             recipients.append(user.email)
-
     recipients = recipients + RECIPIENTS
     return recipients
+
+def get_dates(event_obj):
+    dates = list(Dates.objects.filter(event=event_obj))
+    
+    start_date = str(dates[0].start)
+    start_date = start_date[0:10]
+    end_date = str(dates[-1].end)
+    end_date = end_date[0:10]
+    date = start_date + "$" + end_date
+    return date 
