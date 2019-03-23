@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class DepartmentSerializer(serializers.HyperlinkedModelSerializer):
+class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
         fields = "__all__"
