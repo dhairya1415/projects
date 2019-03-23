@@ -80,6 +80,8 @@ def event_date(request, date):
     if request.method == "GET":
         dates = Dates.objects.filter(start__date=date)
         serializer = DatesSerializer(dates, many=True)
+        #event = Event.objects.filter(dates__start__month = month,dates__start__year = year)
+        #serializer = EventSerializer(event,context={'request':request} ,many=True)
         return Response(serializer.data)
 
 
