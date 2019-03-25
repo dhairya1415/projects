@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import *
 from .models import *
+from .render import render_to_file
 from .utility import generate_csv, month_dict
 import json
 import pandas as pd
@@ -115,24 +116,38 @@ Download PDF
 
 
 @api_view(["GET"])
-def report_pdf(request, pk):
+def report_pdf_download(request, pk):
     if request.method == "GET":
         report = Report.objects.get(id=pk)
         name = report.event.name
-        date = str(report.event.start)
-        users = User.objects.all()
-        user_email = []
-        for user in users:
-            user_email.append(user.email)
-        date = date[0:10]
+        date = report.event.dates.start[0:10]
+        #date = str(report.event.start)
+        # users = User.objects.all()
+        # user_email = []
+        # for user in users:
+        #     user_email.append(user.email)
+        #date = date[0:10]
         response = HttpResponse(content_type="text/pdf")
-        filename = "media/pdf/{}${}.pdf".format(name, date)
+        filename = "media/pdf/{}${}.pdf".format(name,date)
         download_name = "{}_Report.pdf".format(name)
         dataset = open(filename, "r")
         response = HttpResponse(dataset, content_type="text/pdf")
         response["Content-Disposition"] = 'attachment; filename="{}"'.format(
             download_name
         )
+        return response
+
+
+@api_view(["GET"])
+def report_pdf_preview(request, pk):
+    if request.method == "GET":
+        report = Report.objects.get(id=pk)
+        name = report.event.name
+        #date = str(report.event.start)
+        #date = date[0:10]
+        filename = "media/pdf/{}$.pdf".format(name)
+        dataset = open(filename, "r")
+        response = HttpResponse(dataset, content_type="application/pdf")
         return response
 
 
@@ -256,14 +271,29 @@ class ImageViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
-        # report_id = serializer.data["report"]
-        # report = Report.objects.get(pk=report_id)
-        # event = report.event
-        # serializer_context = {"request": request}
-        # report_json = ReportSerializer(report, context=serializer_context).data
-        # event_json = EventSerializer(event).data
-        # print(report_json)
-        # generate_csv(report_json, event_json)
+        report_id = serializer.data["report"]
+        report = Report.objects.get(pk=report_id)
+        event = report.event
+        serializer_context = {"request": request}
+        report_json = ReportSerializer(report, context=serializer_context).data
+        event_json = EventSerializer(event).data
+        for item in event_json["dates"]:
+            item["start"] = item["start"][0:10]
+            item["end"] = item["end"][0:10]
+        dates_len = len(event_json["dates"])
+        filename = event_json['name']+'$'+event_json["dates"][0]["start"]
+        event_json["dates"] = {'start':event_json["dates"][0]['start'],'end':event_json["dates"][dates_len-1]['end']}
+        for items in report_json["image"]:
+            items["image"] = items["image"][22::]
+        print(report_json["image"])
+        params ={
+        'report_dict':report_json,
+        'event_dict':event_json,
+        'request': request,
+        
+        }
+
+        render_to_file('pdf.html',params,filename)
         headers = self.get_success_headers(serializer.data)
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
@@ -297,6 +327,14 @@ class DepartmentViewSet(viewsets.ModelViewSet):
 class DatesViewSet(viewsets.ModelViewSet):
     queryset = Dates.objects.all()
     serializer_class = DatesSerializer
+
+@api_view(["POST"])
+def dates_multiple(request):
+    list_dates = request.data
+    for date in list_dates:
+        x = DatesSerializer(data=date)
+        if x.is_valid():
+            x.save()
 
 
 # class Logout(APIView):

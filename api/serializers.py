@@ -27,12 +27,14 @@ class EventSerializer(serializers.ModelSerializer):
     report = serializers.PrimaryKeyRelatedField(read_only=True)
     departments = DepartmentSerializer(read_only=True, many=True)
     dates = DatesSerializer(read_only=True, many=True)
+    
     class Meta:
         model = Event
         fields = (
             "id",
             "name",
             "allDay",
+            "venue",
             "departments",
             "venue",
             "expert_name",
@@ -52,9 +54,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ReportSerializer(serializers.HyperlinkedModelSerializer):
-    image = serializers.HyperlinkedRelatedField(
-        many=True, view_name="image-detail", read_only=True
-    )
+    image = ImageSerializer(read_only=True, many=True)
     event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all())
     event_data = EventSerializer(read_only=True, source="event")
 
@@ -70,6 +70,14 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
             "attendance",
         )
 
+    # def validate(self, data):
+    #
+    #     event = data['event']
+    #     venue = data['venue']
+    #     val_event = Event.objects.filter(dates__start = )
+    #     if user_qs.exists():
+    #         raise ValidationError("This sap_id already registered.")
+    #     return data
 
 class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(style={"input_type": "password"})

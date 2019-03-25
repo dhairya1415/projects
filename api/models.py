@@ -12,6 +12,7 @@ class User(AbstractUser):
 class Event(models.Model):
     name = models.CharField(max_length=128)
     allDay = models.BooleanField(default=False)
+    venue = models.CharField(max_length=256)
     expert_name = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     organizer = models.TextField(null=True, blank=True)
