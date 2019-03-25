@@ -90,14 +90,10 @@ Download PDF
 def report_pdf_download(request, pk):
     if request.method == "GET":
         report = Report.objects.get(id=pk)
-        name = report.event.name
-        date = report.event.dates.start[0:10]
-        #date = str(report.event.start)
-        # users = User.objects.all()
-        # user_email = []
-        # for user in users:
-        #     user_email.append(user.email)
-        #date = date[0:10]
+        event = report.event
+        event_serializer = EventSerializer(event).data
+        name = event_serializer['name']
+        date = event_serializer['dates'][0]['start'][0:10]
         response = HttpResponse(content_type="text/pdf")
         filename = "media/pdf/{}${}.pdf".format(name,date)
         download_name = "{}_Report.pdf".format(name)
@@ -113,10 +109,11 @@ def report_pdf_download(request, pk):
 def report_pdf_preview(request, pk):
     if request.method == "GET":
         report = Report.objects.get(id=pk)
-        name = report.event.name
-        #date = str(report.event.start)
-        #date = date[0:10]
-        filename = "media/pdf/{}$.pdf".format(name)
+        event = report.event
+        event_serializer = EventSerializer(event).data
+        name = event_serializer['name']
+        date = event_serializer['dates'][0]['start'][0:10]
+        filename = "media/pdf/{}${}.pdf".format(name,date)
         dataset = open(filename, "r")
         response = HttpResponse(dataset, content_type="application/pdf")
         return response
@@ -225,12 +222,9 @@ class ImageViewSet(viewsets.ModelViewSet):
         serializer_context = {"request": request}
         report_json = ReportSerializer(report, context=serializer_context).data
         event_json = EventSerializer(event).data
-        for item in event_json["dates"]:
-            item["start"] = item["start"][0:10]
-            item["end"] = item["end"][0:10]
         dates_len = len(event_json["dates"])
-        filename = event_json['name']+'$'+event_json["dates"][0]["start"]
-        event_json["dates"] = {'start':event_json["dates"][0]['start'],'end':event_json["dates"][dates_len-1]['end']}
+        filename = event_json['name']+'$'+event_json["dates"][0]["start"][0:10]
+        event_json["dates"] = {'start':event_json["dates"][0]['start'][0:10],'end':event_json["dates"][dates_len-1]['end'][0:10]}
         for items in report_json["image"]:
             items["image"] = items["image"][22::]
         print(report_json["image"])
@@ -238,7 +232,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         'report_dict':report_json,
         'event_dict':event_json,
         'request': request,
-        
+
         }
 
         render_to_file('pdf.html',params,filename)
