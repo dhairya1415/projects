@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from .token import account_activation_token
 from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
-
+import datetime
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,6 +21,24 @@ class DatesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dates
         fields = "__all__"
+
+    # def validate(self,data):
+    #     start = str(data['start'])[0:10].split('-')
+    #     end = str(data['end'])[0:10].split('-')
+    #     events = Event.objects.filter(venue = data['event'].venue)
+    #     for event in events:
+    #         print(event)
+    #         dates = Dates.objects.filter(event=event,start__gte = datetime.date(int(start[0]),int(start[1]),int(start[2])),start__lte = datetime.date(int(end[0]),int(end[1]),int(end[2])))
+    #         dates_1 = Dates.objects.filter(event=event,end__gte = datetime.date(int(start[0]),int(start[1]),int(start[2])),end__lte = datetime.date(int(end[0]),int(end[1]),int(end[2])))
+    #         print(dates)
+    #         if (dates or dates_1):
+    #             raise serializers.ValidationError('Albatroz')
+    #         else:
+    #             continue
+    #     return data
+
+
+
 
 # End of the month events like continuing to next month Logic -- pending
     def validate(self, data):
@@ -48,14 +66,15 @@ class DatesSerializer(serializers.ModelSerializer):
                 if((start_month == start_event_month) or (start_month == end_event_month) or (end_month == start_event_month) or (end_month == end_event_month) ):
                     print('Meow 2')
                     for i in range (int(start_event_day),(int(end_event_day)+1)):
-                        print('Meow -3')
+                        print(i)
                         if (int(start_day) == i or int(end_day) == i):
+                            print('meow -4' )
                             raise serializers.ValidationError("Dates occupied for another event")
                         else:
-                            print('Meow -4')
+                            print('Meow -5')
                             continue
                 else:
-                    print('Meow - 5')
+                    print('Meow - 6')
                     continue
         return data
 
@@ -65,7 +84,6 @@ class EventSerializer(serializers.ModelSerializer):
     report = serializers.PrimaryKeyRelatedField(read_only=True)
     departments = DepartmentSerializer(read_only=True, many=True)
     dates = DatesSerializer(read_only=True, many=True)
-
 
     class Meta:
         model = Event
