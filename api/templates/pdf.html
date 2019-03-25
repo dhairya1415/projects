@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body> 
+        <style>
+            @page {
+            size: A4 portrait;
+            margin: 3cm;
+            }
+        </style> 
+    <div class="container">
+        <img src={% static 'images/letterhead.png' %} alt="OOPS" style="width: 50%; display: block; margin-right: auto; margin-left: auto;">
+        <br>
+        <br>
+        <br>
+        <h1 style="text-align:center;">A report on "{{ event_dict.name }}"</h1>
+        <hr>
+        <br>
+        <br>
+        <h4><b>Delivered by:</b> {{ event_dict.expert_name }}</h4>
+        <h4><b>Organized by:</b></h4>
+        <ul>
+            {% for item in event_dict.departments %}
+                <li><h5>{{ item.department }}</h5></li>
+            {% endfor %}
+        </ul>
+        <h4><b>Date:</b> {{ event_dict.dates.start }} to {{ event_dict.dates.end }}</h4>
+        <!-- <h4><b>Time:</b> {{ event_time }}</h4> -->
+        <h4><b>Venue:</b> {{ event_dict.venue }}</h4>
+        <h4><b>Submitted by:</b> {{ event_dict.organizer }}</h4>
+        <h4><b>No. of participants:</b> {{ report_dict.number_of_participants }}</h4>
+        <h4><b>Event Description:</b></h4>
+        <p class="text-justify">{{ event_dict.description }}</p>
+        <h4><b>After Event Description:</b></h4>
+        <p class="text-justify">{{ report_dict.after_event_description }}</p>
+        <br>
+        <div class="container">
+            {% for item in report_dict.image %}
+                <img src={{ item }} alt="OOPS">
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

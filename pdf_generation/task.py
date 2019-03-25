@@ -6,7 +6,8 @@ import csv
 import pandas as pd
 from api.choices import department
 
-data_file = 'data.csv'
+data_file = "data.csv"
+
 
 def import_data(data_file):
     df = pd.read_csv(data_file)
@@ -31,7 +32,7 @@ def import_data(data_file):
     length = len(image)
     x = []
     for i in range(0, length, 2):
-        x.append(image[i:i+2])
+        x.append(image[i : i + 2])
 
     file_date = event_date_start[0:10]
     pdf_file_name = event_name + "$" + file_date + ".pdf"
@@ -48,7 +49,7 @@ def import_data(data_file):
         no_of_participants,
         x,
         file_date,
-        pdf_file_name
+        pdf_file_name,
     )
 
 
@@ -64,7 +65,7 @@ def generate_pdf(
     no_of_participants,
     x,
     file_date,
-    pdf_file_name
+    pdf_file_name,
 ):
     c = canvas.Canvas("media/pdf/{}".format(pdf_file_name), pagesize=portrait(A4))
     # c = canvas.Canvas(pdf_file_name, pagesize=portrait(A4))
@@ -85,7 +86,9 @@ def generate_pdf(
     c.drawString(2.84 * cm, 20.2 * cm, "Venue: {}".format(event_venue))
 
     c.setFont("Helvetica", 13, leading=None)
-    c.drawString(2.84 * cm, 19.2 * cm, "No. of particpants: {}".format(no_of_participants))
+    c.drawString(
+        2.84 * cm, 19.2 * cm, "No. of particpants: {}".format(no_of_participants)
+    )
 
     c.setFont("Helvetica", 13, leading=None)
     c.drawString(2.84 * cm, 18.2 * cm, "Description:")
@@ -94,7 +97,9 @@ def generate_pdf(
     c.drawString(2.84 * cm, 17.5 * cm, event_description)
 
     c.setFont("Helvetica-Bold", 13, leading=None)
-    c.drawString(13.1 * cm, 4.5 * cm, "HoD " + "({}".format(event_department[:-41]) + ".Dept)")
+    c.drawString(
+        13.1 * cm, 4.5 * cm, "HoD " + "({}".format(event_department[:-41]) + ".Dept)"
+    )
 
     # textobject = c.beginText()
     # textobject.setTextOrigin(0.2*inch, 7.69*inch)
@@ -111,6 +116,7 @@ def generate_pdf(
                 v_gap -= 4
         c.showPage()
     c.save()
+
 
 if __name__ == "__main__":
     import_data(data_file)

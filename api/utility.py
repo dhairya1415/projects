@@ -31,8 +31,8 @@ def generate_csv(report_data, event_data):
         z = z.json()
         y.append(z["image"])
     df["image"][0] = y
-    df["id"][0] = pf["id"][0] 
-    #pf = pf.drop(["id"], 1)
+    df["id"][0] = pf["id"][0]
+    # pf = pf.drop(["id"], 1)
     df = df.drop(["event_data"], 1)
     df = df.drop(range(1, len(report_data["image"])))
     yf = pf.merge(df, how="outer")
