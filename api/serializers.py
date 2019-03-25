@@ -34,13 +34,14 @@ class EventSerializer(serializers.ModelSerializer):
             "name",
             "allDay",
             "departments",
+            "venue",
             "expert_name",
             "description",
             "organizer",
+            'creator_name',
             "report",
             "dates",
         )
-
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
     report = serializers.PrimaryKeyRelatedField(queryset=Report.objects.all())
@@ -63,7 +64,6 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
             "id",
             "event",
             "event_data",
-            "venue",
             "number_of_participants",
             "after_event_description",
             "image",
@@ -93,7 +93,7 @@ class SignUpSerializer(serializers.ModelSerializer):
             user = User(
                 first_name=validated_data["first_name"],
                 last_name=validated_data["last_name"],
-                email=validated_data["email"] + '@gmail.com', # + 'djsce.ac.in'
+                email=validated_data["email"] + '@djsce.ac.in', # + 'djsce.ac.in'
                 username=validated_data["username"],
                 department=validated_data["department"],
             )

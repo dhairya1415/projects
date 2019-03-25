@@ -21,7 +21,7 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register("event", views.EventViewSet)
+router.register("event_custom", views.EventViewSet)
 router.register("report", views.ReportViewSet)
 router.register("image", views.ImageViewSet)
 router.register("department", views.DepartmentViewSet)

@@ -16,7 +16,8 @@ from wsgiref.util import FileWrapper
 import os
 from django.core.mail import EmailMessage
 from .Email import send_mail
-
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 """
 User Data API
@@ -45,6 +46,34 @@ Event Data API
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+
+
+    @method_decorator(login_required)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        #Scheduling of events logic will be here
+        serializer.validated_data["creator_name"] = str(request.user) #to add .user.first_name
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+    @method_decorator(login_required)
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        print(serializer.validated_data)
+        if serializer.validated_data["creator_name"] == str(request.user): #to add .user.first_name
+            self.perform_update(serializer)
+            return Response(serializer.data)
+
+        else:
+            raise serializers.ValidationError('You cannot edit the report you are not the creator')
+
+
 
 
 """
@@ -184,11 +213,34 @@ class ReportViewSet(viewsets.ModelViewSet):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
 
+    @method_decorator(login_required)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        print(serializer.validated_data)
+        #serializer.validated_data["event"]["creator_name"] == request.user
+        if serializer.validated_data["event"].creator_name == str(request.user): #to add .user.first_name
+            self.perform_update(serializer)
+            return Response(serializer.data)
 
-# def report_getter(request, id):
-#     report = Reports.get_object_or_404(pk=id)
-#     print(report.venue)
+        else:
+            raise serializers.ValidationError('You cannot create the report you are not the creator')
 
+    @method_decorator(login_required)
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        print(serializer.validated_data)
+        print(serializer.validated_data["event"].creator_name)
+        print(request.user)
+        if serializer.validated_data["event"].creator_name == str(request.user):#to add .user.first_name
+            self.perform_update(serializer)
+            return Response(serializer.data)
+
+        else:
+            raise serializers.ValidationError('You cannot edit the report you are not the creator')
 
 """
 Image API DATA
@@ -251,12 +303,6 @@ class DatesViewSet(viewsets.ModelViewSet):
 #     def post(self, request):
 #         logout(request)
 #         # return HttpResponseRedirect(redirect_to="//")
-
-
-class ReportViewSet(viewsets.ModelViewSet):
-    queryset = Report.objects.all()
-    serializer_class = ReportSerializer
-
 
 """
 User Activation
