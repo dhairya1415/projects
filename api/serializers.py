@@ -27,6 +27,7 @@ class EventSerializer(serializers.ModelSerializer):
     report = serializers.PrimaryKeyRelatedField(read_only=True)
     departments = DepartmentSerializer(read_only=True, many=True)
     dates = DatesSerializer(read_only=True, many=True)
+    
     class Meta:
         model = Event
         fields = (
@@ -52,9 +53,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ReportSerializer(serializers.HyperlinkedModelSerializer):
-    image = serializers.HyperlinkedRelatedField(
-        many=True, view_name="image-detail", read_only=True
-    )
+    image = ImageSerializer(read_only=True, many=True)
     event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all())
     event_data = EventSerializer(read_only=True, source="event")
 

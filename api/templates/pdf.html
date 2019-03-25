@@ -42,7 +42,8 @@
         <br>
         <div class="container">
             {% for item in report_dict.image %}
-                <img src={{ item }} alt="OOPS">
+                <img src={{ item.image }} alt="OOPS">
+                <br>
             {% endfor %}
         </div>
     </div>
