@@ -1,10 +1,13 @@
 from rest_framework import serializers
+from rest_framework.serializers import ValidationError
 from .models import User, Event, Report, Image, Department, Dates
 from django.template.loader import render_to_string
 from .token import account_activation_token
 from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
-import datetime
+from datetime import datetime
+
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,62 +25,15 @@ class DatesSerializer(serializers.ModelSerializer):
         model = Dates
         fields = "__all__"
 
-    # def validate(self,data):
-    #     start = str(data['start'])[0:10].split('-')
-    #     end = str(data['end'])[0:10].split('-')
-    #     events = Event.objects.filter(venue = data['event'].venue)
-    #     for event in events:
-    #         print(event)
-    #         dates = Dates.objects.filter(event=event,start__gte = datetime.date(int(start[0]),int(start[1]),int(start[2])),start__lte = datetime.date(int(end[0]),int(end[1]),int(end[2])))
-    #         dates_1 = Dates.objects.filter(event=event,end__gte = datetime.date(int(start[0]),int(start[1]),int(start[2])),end__lte = datetime.date(int(end[0]),int(end[1]),int(end[2])))
-    #         print(dates)
-    #         if (dates or dates_1):
-    #             raise serializers.ValidationError('Albatroz')
-    #         else:
-    #             continue
-    #     return data
-
-
-
-
-# End of the month events like continuing to next month Logic -- pending
     def validate(self, data):
-        print(data)
-        start = str(data['start'])[0:10]
-        end = str(data['end'])[0:10]
-        start_month = start[0:8]
-        end_month = end[0:8]
-        start_day = start[8:10]
-        end_day = end[8:10]
-        events = Event.objects.filter(venue = data['event'].venue)
-
-        print(events)
-        for event in events:
-            print(event)
-            dates = Dates.objects.filter(event=event)
-            for date in dates:
-                print('Meow --1')
-                start_event = str(date.start)[0:10]
-                end_event = str(date.end)[0:10]
-                start_event_month = start_event[0:8]
-                end_event_month = end_event[0:8]
-                start_event_day = start_event[8:10]
-                end_event_day = end_event[8:10]
-                if((start_month == start_event_month) or (start_month == end_event_month) or (end_month == start_event_month) or (end_month == end_event_month) ):
-                    print('Meow 2')
-                    for i in range (int(start_event_day),(int(end_event_day)+1)):
-                        print(i)
-                        if (int(start_day) == i or int(end_day) == i):
-                            print('meow -4' )
-                            raise serializers.ValidationError("Dates occupied for another event")
-                        else:
-                            print('Meow -5')
-                            continue
-                else:
-                    print('Meow - 6')
-                    continue
+        event_check = data['event']
+        start = datetime.date(data['start'])
+        end = datetime.date(data['end'])
+        event = Event.objects.filter(dates__start__date__lte=start,dates__end__date__gte=end,venue=event_check.venue)
+        event_1 = Event.objects.filter(dates__start__date__gte=start,dates__end__date__lte=end,venue=event_check.venue)
+        if event.exists() or event_1.exists():
+            raise serializers.ValidationError("This location and timing is already occupied.")
         return data
-
 
 
 class EventSerializer(serializers.ModelSerializer):
