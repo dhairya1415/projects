@@ -19,10 +19,12 @@ from django.core.mail import EmailMessage
 from .Email import send_mail
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 """
 User Data API
 """
+
 
 @api_view(["GET"])
 def user_list(request, first):
@@ -44,37 +46,42 @@ class UserViewSet(viewsets.ModelViewSet):
 Event Data API
 """
 
+
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-
 
     @method_decorator(login_required)
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        #Scheduling of events logic will be here
-        serializer.validated_data["creator_name"] = str(request.user) #to add .user.first_name
+        # Scheduling of events logic will be here
+        serializer.validated_data["creator_name"] = str(
+            request.user
+        )  # to add .user.first_name
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
     @method_decorator(login_required)
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
+        partial = kwargs.pop("partial", False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         print(serializer.validated_data)
-        if serializer.validated_data["creator_name"] == str(request.user): #to add .user.first_name
+        if serializer.validated_data["creator_name"] == str(
+            request.user
+        ):  # to add .user.first_name
             self.perform_update(serializer)
             return Response(serializer.data)
 
         else:
-            raise serializers.ValidationError('You cannot edit the report you are not the creator')
-
-
+            raise serializers.ValidationError(
+                "You cannot edit the report you are not the creator"
+            )
 
 
 """
@@ -97,6 +104,7 @@ def event_list(request, month, year):
 Event data by date
 """
 
+
 @api_view(["GET"])
 def event_date(request, date):
     """
@@ -105,8 +113,8 @@ def event_date(request, date):
     if request.method == "GET":
         dates = Dates.objects.filter(start__date=date)
         serializer = DatesSerializer(dates, many=True)
-        #event = Event.objects.filter(dates__start__month = month,dates__start__year = year)
-        #serializer = EventSerializer(event,context={'request':request} ,many=True)
+        # event = Event.objects.filter(dates__start__month = month,dates__start__year = year)
+        # serializer = EventSerializer(event,context={'request':request} ,many=True)
         return Response(serializer.data)
 
 
@@ -121,14 +129,14 @@ def report_pdf_download(request, pk):
         report = Report.objects.get(id=pk)
         name = report.event.name
         date = report.event.dates.start[0:10]
-        #date = str(report.event.start)
+        # date = str(report.event.start)
         # users = User.objects.all()
         # user_email = []
         # for user in users:
         #     user_email.append(user.email)
-        #date = date[0:10]
+        # date = date[0:10]
         response = HttpResponse(content_type="text/pdf")
-        filename = "media/pdf/{}${}.pdf".format(name,date)
+        filename = "media/pdf/{}${}.pdf".format(name, date)
         download_name = "{}_Report.pdf".format(name)
         dataset = open(filename, "r")
         response = HttpResponse(dataset, content_type="text/pdf")
@@ -143,8 +151,8 @@ def report_pdf_preview(request, pk):
     if request.method == "GET":
         report = Report.objects.get(id=pk)
         name = report.event.name
-        #date = str(report.event.start)
-        #date = date[0:10]
+        # date = str(report.event.start)
+        # date = date[0:10]
         filename = "media/pdf/{}$.pdf".format(name)
         dataset = open(filename, "r")
         response = HttpResponse(dataset, content_type="application/pdf")
@@ -224,6 +232,8 @@ def send_pdf(request, pk):
 """
 Report API DATA
 """
+
+
 class ReportViewSet(viewsets.ModelViewSet):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
@@ -233,29 +243,38 @@ class ReportViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         print(serializer.validated_data)
-        #serializer.validated_data["event"]["creator_name"] == request.user
-        if serializer.validated_data["event"].creator_name == str(request.user): #to add .user.first_name
+        # serializer.validated_data["event"]["creator_name"] == request.user
+        if serializer.validated_data["event"].creator_name == str(
+            request.user
+        ):  # to add .user.first_name
             self.perform_update(serializer)
             return Response(serializer.data)
 
         else:
-            raise serializers.ValidationError('You cannot create the report you are not the creator')
+            raise serializers.ValidationError(
+                "You cannot create the report you are not the creator"
+            )
 
     @method_decorator(login_required)
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
+        partial = kwargs.pop("partial", False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         print(serializer.validated_data)
         print(serializer.validated_data["event"].creator_name)
         print(request.user)
-        if serializer.validated_data["event"].creator_name == str(request.user):#to add .user.first_name
+        if serializer.validated_data["event"].creator_name == str(
+            request.user
+        ):  # to add .user.first_name
             self.perform_update(serializer)
             return Response(serializer.data)
 
         else:
-            raise serializers.ValidationError('You cannot edit the report you are not the creator')
+            raise serializers.ValidationError(
+                "You cannot edit the report you are not the creator"
+            )
+
 
 """
 Image API DATA
@@ -281,19 +300,21 @@ class ImageViewSet(viewsets.ModelViewSet):
             item["start"] = item["start"][0:10]
             item["end"] = item["end"][0:10]
         dates_len = len(event_json["dates"])
-        filename = event_json['name']+'$'+event_json["dates"][0]["start"]
-        event_json["dates"] = {'start':event_json["dates"][0]['start'],'end':event_json["dates"][dates_len-1]['end']}
+        filename = event_json["name"] + "$" + event_json["dates"][0]["start"]
+        event_json["dates"] = {
+            "start": event_json["dates"][0]["start"],
+            "end": event_json["dates"][dates_len - 1]["end"],
+        }
         for items in report_json["image"]:
             items["image"] = items["image"][22::]
         print(report_json["image"])
-        params ={
-        'report_dict':report_json,
-        'event_dict':event_json,
-        'request': request,
-        
+        params = {
+            "report_dict": report_json,
+            "event_dict": event_json,
+            "request": request,
         }
 
-        render_to_file('pdf.html',params,filename)
+        render_to_file("pdf.html", params, filename)
         headers = self.get_success_headers(serializer.data)
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
@@ -328,6 +349,7 @@ class DatesViewSet(viewsets.ModelViewSet):
     queryset = Dates.objects.all()
     serializer_class = DatesSerializer
 
+
 @api_view(["POST"])
 def dates_multiple(request):
     list_dates = request.data
@@ -345,6 +367,7 @@ def dates_multiple(request):
 """
 User Activation
 """
+
 
 def activate(request, uidb64, token):
     try:

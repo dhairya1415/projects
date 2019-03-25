@@ -9,6 +9,7 @@ class User(AbstractUser):
         max_length=6, choices=choices.DEPARTMENT, default="COMPS"
     )
 
+
 class Event(models.Model):
     name = models.CharField(max_length=128)
     allDay = models.BooleanField(default=False)
@@ -17,13 +18,16 @@ class Event(models.Model):
     description = models.TextField(null=True, blank=True)
     organizer = models.TextField(null=True, blank=True)
     venue = models.CharField(max_length=256)
-    creator_name = models.CharField(max_length = 256 ,null = True, blank = True)
+    creator_name = models.CharField(max_length=256, null=True, blank=True)
 
     def __str__(self):
         return "{} : {}".format(self.pk, self.name)
 
+
 class Department(models.Model):
-    event = models.ForeignKey(Event, related_name="departments", on_delete=models.CASCADE)
+    event = models.ForeignKey(
+        Event, related_name="departments", on_delete=models.CASCADE
+    )
     department = models.CharField(
         max_length=6, choices=choices.DEPARTMENT, default="COMPS"
     )
@@ -39,7 +43,7 @@ class Report(models.Model):
     event = models.OneToOneField(Event, related_name="report", on_delete=models.CASCADE)
     after_event_description = models.TextField(null=True, blank=True)
     number_of_participants = models.IntegerField()
-    attendance = models.FileField()
+    attendance = models.ImageField()
 
     def __str__(self):
         return self.event.__str__()

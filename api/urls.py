@@ -31,8 +31,16 @@ urlpatterns = [
     path("", include(router.urls)),
     path("month/<int:month>/<int:year>", views.month_report, name="month_report"),
     path("dates_multiple/", views.dates_multiple, name="dates_multiple"),
-    path("report_pdf_download/<int:pk>", views.report_pdf_download, name="report_pdf_donwload"),
-    path("report_pdf_preview/<int:pk>", views.report_pdf_preview, name="report_pdf_preview"),
+    path(
+        "report_pdf_download/<int:pk>",
+        views.report_pdf_download,
+        name="report_pdf_donwload",
+    ),
+    path(
+        "report_pdf_preview/<int:pk>",
+        views.report_pdf_preview,
+        name="report_pdf_preview",
+    ),
     path("send_pdf/<int:pk>", views.send_pdf, name="send_pdf"),
     path("event/<str:date>", views.event_date, name="date_request"),
     path("event/<int:month>/<int:year>", views.event_list, name="month_request"),

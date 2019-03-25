@@ -10,7 +10,7 @@ def render_to_file(path: str, params: dict, file):
     template = get_template(path)
     html = template.render(params)
     file_name = "{}.pdf".format(file)
-    file_path = os.path.join('media/pdf', file_name)
+    file_path = os.path.join("media/pdf", file_name)
     file_pdf = open(file_path, "wb")
     pisaStatus = pisa.CreatePDF(html, dest=file_pdf)
     file_pdf.close()
