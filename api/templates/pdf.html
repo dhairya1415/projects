@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-{% load staticfiles %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,7 +14,7 @@
             }
         </style> 
     <div class="container">
-        <img src={% static 'images/letterhead.png' %} alt="OOPS" style="width: 50%; display: block; margin-right: auto; margin-left: auto;">
+        <img src='./static/images/letterhead.png' alt="OOPS" style="width: 50%; display: block; margin-right: auto; margin-left: auto;">
         <br>
         <br>
         <br>
@@ -42,7 +41,8 @@
         <br>
         <div class="container">
             {% for item in report_dict.image %}
-                <img src={{ item }} alt="OOPS">
+                <img src={{ item.image }} alt="OOPS">
+                <br>
             {% endfor %}
         </div>
     </div>

@@ -91,6 +91,7 @@ def report_pdf_download(request, pk):
     if request.method == "GET":
         report = Report.objects.get(id=pk)
         name = report.event.name
+        date = report.event.dates.start[0:10]
         #date = str(report.event.start)
         # users = User.objects.all()
         # user_email = []
@@ -98,7 +99,7 @@ def report_pdf_download(request, pk):
         #     user_email.append(user.email)
         #date = date[0:10]
         response = HttpResponse(content_type="text/pdf")
-        filename = "media/pdf/{}$.pdf".format(name)
+        filename = "media/pdf/{}${}.pdf".format(name,date)
         download_name = "{}_Report.pdf".format(name)
         dataset = open(filename, "r")
         response = HttpResponse(dataset, content_type="text/pdf")
@@ -230,6 +231,9 @@ class ImageViewSet(viewsets.ModelViewSet):
         dates_len = len(event_json["dates"])
         filename = event_json['name']+'$'+event_json["dates"][0]["start"]
         event_json["dates"] = {'start':event_json["dates"][0]['start'],'end':event_json["dates"][dates_len-1]['end']}
+        for items in report_json["image"]:
+            items["image"] = items["image"][22::]
+        print(report_json["image"])
         params ={
         'report_dict':report_json,
         'event_dict':event_json,
@@ -271,6 +275,14 @@ class DepartmentViewSet(viewsets.ModelViewSet):
 class DatesViewSet(viewsets.ModelViewSet):
     queryset = Dates.objects.all()
     serializer_class = DatesSerializer
+
+@api_view(["POST"])
+def dates_multiple(request):
+    list_dates = request.data
+    for date in list_dates:
+        x = DatesSerializer(data=date)
+        if x.is_valid():
+            x.save()
 
 
 # class Logout(APIView):
