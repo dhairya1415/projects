@@ -30,7 +30,8 @@ class DatesSerializer(serializers.ModelSerializer):
         start = datetime.date(data['start'])
         end = datetime.date(data['end'])
         event = Event.objects.filter(dates__start__date__lte=start,dates__end__date__gte=end,venue=event_check.venue)
-        if event.exists():
+        event_1 = Event.objects.filter(dates__start__date__gte=start,dates__end__date__lte=end,venue=event_check.venue)
+        if event.exists() or event_1.exists():
             raise serializers.ValidationError("This location and timing is already occupied.")
         return data
 
@@ -39,7 +40,6 @@ class EventSerializer(serializers.ModelSerializer):
     report = serializers.PrimaryKeyRelatedField(read_only=True)
     departments = DepartmentSerializer(read_only=True, many=True)
     dates = DatesSerializer(read_only=True, many=True)
-
 
     class Meta:
         model = Event
