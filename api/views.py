@@ -167,31 +167,53 @@ def month_report(request, month, year):
     List all events according to month and year
     """
     if request.method == "GET":
-        event = Event.objects.filter(start__month=month, start__year=year)
+        event = Event.objects.filter(dates__start__month=month, dates__start__year=year)
         serializer = EventSerializer(event, many=True)
-        r_data = list(serializer.data)
-        month_name = month_dict[month]
-        filename = "media/csv_month/{}.csv".format(month_name)
-        for item in r_data:
-            item["start"] = item["start"][0:10]
-        start_date = "2019-{}-01".format(month)
-        end_date = "2019-{}-31".format(month)
-        dates = pd.date_range(start_date, end_date)
-        zf = pd.DataFrame(index=dates)
-        df = pd.DataFrame.from_dict(r_data)
-        df.to_csv(filename)
-        nf = pd.read_csv(
-            filename, index_col="start", parse_dates=True, na_values=["nan", "NaN"]
-        )
-        nf = nf.drop(columns=[nf.columns[0], nf.columns[1]])
-        zf = zf.join(nf, how="inner")
-        zf.to_csv(filename)
-        dataset = open(filename, "r")
-        response = HttpResponse(dataset, content_type="text/csv")
-        response["Content-Disposition"] = 'attachment; filename="{}_Report.csv"'.format(
-            month_name
-        )
-        return response
+        serializer = serializer.data
+        li = []
+        for item in serializer:
+            print(item['id'])
+            if item["id"] in li:
+                serializer.remove(item)
+            else:
+                li.append(item["id"])
+                item["dates"]= {"start":item["dates"][0]["start"],"end":item["dates"][len(item["dates"])-1]["end"]}
+                dept_list = []
+                for dept in item["departments"]:
+                    #print(type(dept))
+                    dept = dept["department"]
+                    dept_list.append(dept)
+
+                item["departments"] = dept_list
+                item["start"]= item["dates"]["start"]
+                item["end"]= item["dates"]["end"]
+                item.pop('dates')
+                #print(li)
+        #print(li)
+        return Response(serializer)
+        # r_data = list(serializer.data)
+        # month_name = month_dict[month]
+        # filename = "media/csv_month/{}.csv".format(month_name)
+        # for item in r_data:
+        #     item["start"] = item["start"][0:10]
+        # start_date = "2019-{}-01".format(month)
+        # end_date = "2019-{}-31".format(month)
+        # dates = pd.date_range(start_date, end_date)
+        # zf = pd.DataFrame(index=dates)
+        # df = pd.DataFrame.from_dict(r_data)
+        # df.to_csv(filename)
+        # nf = pd.read_csv(
+        #     filename, index_col="start", parse_dates=True, na_values=["nan", "NaN"]
+        # )
+        # nf = nf.drop(columns=[nf.columns[0], nf.columns[1]])
+        # zf = zf.join(nf, how="inner")
+        # zf.to_csv(filename)
+        # dataset = open(filename, "r")
+        # response = HttpResponse(dataset, content_type="text/csv")
+        # response["Content-Disposition"] = 'attachment; filename="{}_Report.csv"'.format(
+        #     month_name
+        # )
+        #return response
 
 
 """
