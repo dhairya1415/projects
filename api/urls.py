@@ -21,16 +21,16 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register("event_custom", views.EventViewSet)
-router.register("report", views.ReportViewSet)
-router.register("image", views.ImageViewSet)
-router.register("department", views.DepartmentViewSet)
+router.register("event", views.EventViewSet)
+router.register("reports", views.ReportViewSet)
+router.register("images", views.ImageViewSet)
+router.register("departments", views.DepartmentViewSet)
 router.register("dates", views.DatesViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
     path("month/<int:month>/<int:year>", views.month_report, name="month_report"),
-    path("dates_multiple/", views.dates_multiple, name="dates_multiple"),
+    path("dates-multiple/", views.dates_multiple, name="dates_multiple"),
     path(
         "report_pdf_download/<int:pk>",
         views.report_pdf_download,
@@ -42,11 +42,12 @@ urlpatterns = [
         name="report_pdf_preview",
     ),
     path("send_pdf/<int:pk>", views.send_pdf, name="send_pdf"),
-    path("event/<str:date>", views.event_date, name="date_request"),
-    path("event/<int:month>/<int:year>", views.event_list, name="month_request"),
     path("admin/", admin.site.urls),
     path("signup/", views.SignUp.as_view(), name="signup"),  # Signup
     path("activate/<str:uidb64>/<str:token>", views.activate, name="activate"),
+
+    path("event-calendar/<str:date>", views.event_date, name="date_request"),
+    path("event-calendar/<int:month>/<int:year>", views.event_list, name="month_request"),
 ]
 
 # Dhairya Check these urls
