@@ -253,6 +253,18 @@ def dates_multiple(request):
             return HttpResponse(status=400)
     return HttpResponse('OK', status=200)
 
+@api_view(["POST"])
+def depts_multiple(request):
+    list_depts = request.data
+    for dept in list_depts:
+        print(dept)
+        x = DepartmentSerializer(data=dept)
+        if x.is_valid():
+            x.save()
+        else:
+            return HttpResponse(status=400)
+    return HttpResponse('OK', status=200)
+
 
 """
 Event data by month

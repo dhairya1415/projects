@@ -30,6 +30,7 @@ router.register("dates", views.DatesViewSet)
 urlpatterns = [
     path("", include(router.urls)),
     path("dates-multiple/", views.dates_multiple, name="dates_multiple"),
+    path("depts-multiple/", views.depts_multiple, name="depts_multiple"),
     path(
         "month-report/<int:month>/<int:year>", views.month_report, name="month_report"
     ),
