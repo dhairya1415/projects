@@ -324,7 +324,7 @@ def report_pdf_download(request, pk):
         response = HttpResponse(content_type="text/pdf")
         filename = "media/pdf/{}${}.pdf".format(name, date)
         download_name = "{}_Report.pdf".format(name)
-        dataset = open(filename, "r")
+        dataset = open(filename, "rb")
         response = HttpResponse(dataset, content_type="text/pdf")
         response["Content-Disposition"] = 'attachment; filename="{}"'.format(
             download_name
