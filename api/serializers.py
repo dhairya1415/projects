@@ -20,7 +20,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class DatesSerializer(serializers.ModelSerializer):
+class DateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dates
         fields = "__all__"
@@ -46,10 +46,25 @@ class DatesSerializer(serializers.ModelSerializer):
         return data
 
 
+class CalendarDateSerializer(serializers.ModelSerializer):
+    event = serializers.PrimaryKeyRelatedField(read_only=True)
+    title = serializers.CharField(read_only=True, source='event.name')
+
+    class Meta:
+        model = Dates
+        fields = [
+            'event',
+            'title',
+            'start',
+            'end',
+            'allDay',
+        ]
+
+
 class EventSerializer(serializers.ModelSerializer):
     report = serializers.PrimaryKeyRelatedField(read_only=True)
     departments = DepartmentSerializer(read_only=True, many=True)
-    dates = DatesSerializer(read_only=True, many=True)
+    dates = DateSerializer(read_only=True, many=True)
     creator = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:

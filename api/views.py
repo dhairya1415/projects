@@ -210,7 +210,7 @@ class DepartmentViewSet(viewsets.ModelViewSet):
 
 class DatesViewSet(viewsets.ModelViewSet):
     queryset = Dates.objects.all()
-    serializer_class = DatesSerializer
+    serializer_class = DateSerializer
 
     @method_decorator(login_required)
     def create(self, request, *args, **kwargs):
@@ -246,7 +246,7 @@ def dates_multiple(request):
     list_dates = request.data
     for date in list_dates:
         print(date)
-        x = DatesSerializer(data=date)
+        x = DateSerializer(data=date)
         if x.is_valid():
             x.save()
         else:
@@ -267,34 +267,43 @@ def depts_multiple(request):
 
 
 """
+Event data for calendar
+"""
+@api_view(["GET"])
+def event_list_calendar_all(request):
+    """
+    List all events
+    """
+    if request.method == "GET":
+        dates = Dates.objects.all()
+        serializer = CalendarDateSerializer(dates, many=True)
+        return Response(serializer.data)
+
+"""
 Event data by month
 """
-
-
 @api_view(["GET"])
-def event_list(request, month, year):
+def event_list_by_month(request, month, year):
     """
     List all events according to month and year
     """
     if request.method == "GET":
         dates = Dates.objects.filter(start__month=month, start__year=year)
-        serializer = DatesSerializer(dates, many=True)
+        serializer = CalendarDateSerializer(dates, many=True)
         return Response(serializer.data)
-
 
 """
 Event data by date
 """
-
-
 @api_view(["GET"])
-def event_date(request, date):
+def event_list_by_date(request, date):
     """
     List all Events according to date
     """
     if request.method == "GET":
         dates = Dates.objects.filter(start__date=date)
-        serializer = DatesSerializer(dates, many=True)
+        events = set([d.event for d in dates.all()])
+        serializer = EventSerializer(events, many=True)
         # event = Event.objects.filter(dates__start__month = month,dates__start__year = year)
         # serializer = EventSerializer(event,context={'request':request} ,many=True)
         return Response(serializer.data)

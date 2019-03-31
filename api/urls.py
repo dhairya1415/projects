@@ -49,10 +49,10 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("signup/", views.SignUp.as_view(), name="signup"),
     path("activate/<str:uidb64>/<str:token>", views.activate, name="activate"),
-    path("event-calendar/<str:date>", views.event_date, name="date_request"),
-    path(
-        "event-calendar/<int:month>/<int:year>", views.event_list, name="month_request"
-    ),
+
+    path("event-calendar/", views.event_list_calendar_all, name="date_request"),
+    path("event-calendar/<str:date>", views.event_list_by_date, name="date_request"),
+    path("event-calendar/<int:month>/<int:year>", views.event_list_by_month, name="month_request"),
 ]
 
 # Dhairya Check these urls
