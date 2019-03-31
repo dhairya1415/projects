@@ -50,7 +50,7 @@ class EventSerializer(serializers.ModelSerializer):
     report = serializers.PrimaryKeyRelatedField(read_only=True)
     departments = DepartmentSerializer(read_only=True, many=True)
     dates = DatesSerializer(read_only=True, many=True)
-    creator_name = serializers.PrimaryKeyRelatedField(read_only=True)
+    creator = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Event
