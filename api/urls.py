@@ -21,23 +21,37 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register("event", views.EventViewSet)
-router.register("report", views.ReportViewSet)
-router.register("image", views.ImageViewSet)
-router.register("department", views.DepartmentViewSet)
+router.register("events", views.EventViewSet)
+router.register("reports", views.ReportViewSet)
+router.register("images", views.ImageViewSet)
+router.register("departments", views.DepartmentViewSet)
 router.register("dates", views.DatesViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("month/<int:month>/<int:year>", views.month_report, name="month_report"),
-    path("report_pdf_download/<int:pk>", views.report_pdf_download, name="report_pdf_donwload"),
-    path("report_pdf_preview/<int:pk>", views.report_pdf_preview, name="report_pdf_preview"),
+    path("dates-multiple/", views.dates_multiple, name="dates_multiple"),
+    path(
+        "month-report/<int:month>/<int:year>", views.month_report, name="month_report"
+    ),
+    path(
+        "report_pdf_download/<int:pk>",
+        views.report_pdf_download,
+        name="report_pdf_donwload",
+    ),
+    path(
+        "report_pdf_preview/<int:pk>",
+        views.report_pdf_preview,
+        name="report_pdf_preview",
+    ),
+    path("profile/<str:username>", views.user_profile, name="user_profile"),
     path("send_pdf/<int:pk>", views.send_pdf, name="send_pdf"),
-    path("event/<str:date>", views.event_date, name="date_request"),
-    path("event/<int:month>/<int:year>", views.event_list, name="month_request"),
     path("admin/", admin.site.urls),
-    path("signup/", views.SignUp.as_view(), name="signup"),  # Signup
+    path("signup/", views.SignUp.as_view(), name="signup"),
     path("activate/<str:uidb64>/<str:token>", views.activate, name="activate"),
+    path("event-calendar/<str:date>", views.event_date, name="date_request"),
+    path(
+        "event-calendar/<int:month>/<int:year>", views.event_list, name="month_request"
+    ),
 ]
 
 # Dhairya Check these urls

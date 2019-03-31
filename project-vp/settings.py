@@ -69,6 +69,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = "project-vp.urls"
+APPEND_SLASH = True
 
 AUTH_USER_MODEL = "api.User"
 
@@ -167,3 +168,6 @@ EMAIL_HOST_USER = "djsanghvinoreply@gmail.com"
 EMAIL_HOST_PASSWORD = "Unicode@123"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+
+LOGIN_URL = "/auth/token/login"
