@@ -12,12 +12,10 @@ class User(AbstractUser):
 
 class Event(models.Model):
     name = models.CharField(max_length=128)
-    allDay = models.BooleanField(default=False)
     venue = models.CharField(max_length=256)
     expert_name = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     organizer = models.TextField(null=True, blank=True)
-    venue = models.CharField(max_length=256)
     creator_name = models.CharField(max_length=256, null=True, blank=True)
 
     def __str__(self):
@@ -34,9 +32,10 @@ class Department(models.Model):
 
 
 class Dates(models.Model):
+    event = models.ForeignKey(Event, related_name="dates", on_delete=models.CASCADE)
     start = models.DateTimeField()
     end = models.DateTimeField()
-    event = models.ForeignKey(Event, related_name="dates", on_delete=models.CASCADE)
+    allDay = models.BooleanField(default=False)
 
 
 class Report(models.Model):

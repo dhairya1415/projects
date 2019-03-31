@@ -45,7 +45,6 @@ class EventSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
-            "allDay",
             "venue",
             "departments",
             "venue",
