@@ -19,19 +19,30 @@ class DepartmentSerializer(serializers.ModelSerializer):
         model = Department
         fields = "__all__"
 
+
 class DatesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dates
         fields = "__all__"
 
     def validate(self, data):
-        event_check = data['event']
-        start = datetime.date(data['start'])
-        end = datetime.date(data['end'])
-        event = Event.objects.filter(dates__start__date__lte=start,dates__end__date__gte=end,venue=event_check.venue)
-        event_1 = Event.objects.filter(dates__start__date__gte=start,dates__end__date__lte=end,venue=event_check.venue)
+        event_check = data["event"]
+        start = datetime.date(data["start"])
+        end = datetime.date(data["end"])
+        event = Event.objects.filter(
+            dates__start__date__lte=start,
+            dates__end__date__gte=end,
+            venue=event_check.venue,
+        )
+        event_1 = Event.objects.filter(
+            dates__start__date__gte=start,
+            dates__end__date__lte=end,
+            venue=event_check.venue,
+        )
         if event.exists() or event_1.exists():
-            raise serializers.ValidationError("This location and timing is already occupied.")
+            raise serializers.ValidationError(
+                "This location and timing is already occupied."
+            )
         return data
 
 
@@ -51,10 +62,11 @@ class EventSerializer(serializers.ModelSerializer):
             "expert_name",
             "description",
             "organizer",
-            'creator_name',
+            "creator_name",
             "report",
             "dates",
         )
+
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
     report = serializers.PrimaryKeyRelatedField(queryset=Report.objects.all())
@@ -81,6 +93,7 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
             "attendance",
         )
 
+
 class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(style={"input_type": "password"})
 
@@ -101,7 +114,7 @@ class SignUpSerializer(serializers.ModelSerializer):
             user = User(
                 first_name=validated_data["first_name"],
                 last_name=validated_data["last_name"],
-                email=validated_data["email"] + '@djsce.ac.in', # + 'djsce.ac.in'
+                email=validated_data["email"] + "@djsce.ac.in",  # + 'djsce.ac.in'
                 username=validated_data["username"],
                 department=validated_data["department"],
             )
@@ -122,12 +135,11 @@ class SignUpSerializer(serializers.ModelSerializer):
             email.send()
             return user
         else:
-            raise serializers.ValidationError("Email Id does not match the domain @djsce.ac.in")
-
+            raise serializers.ValidationError(
+                "Email Id does not match the domain @djsce.ac.in"
+            )
 
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=10)
-    password = serializers.CharField(
-        style={"input_type": "password"}
-    )
+    password = serializers.CharField(style={"input_type": "password"})

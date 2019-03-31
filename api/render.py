@@ -6,6 +6,7 @@ import os
 from urllib.request import urlopen
 from django.conf import settings
 
+
 def link_callback(uri, rel):
     """
     Convert HTML URIs to absolute system paths so xhtml2pdf can access those
@@ -14,7 +15,7 @@ def link_callback(uri, rel):
     # use short variable names
     sUrl = settings.STATIC_URL
     sRoot = settings.STATIC_ROOT
-    mUrl = settings.MEDIA_URL       #media/name.jpg
+    mUrl = settings.MEDIA_URL  # media/name.jpg
     mRoot = settings.MEDIA_ROOT
 
     # convert URIs to absolute system paths
@@ -27,9 +28,7 @@ def link_callback(uri, rel):
 
     # make sure that file exists
     if not os.path.isfile(path):
-            raise Exception(
-                'media URI must start with %s or %s' % (sUrl, mUrl)
-            )
+        raise Exception("media URI must start with %s or %s" % (sUrl, mUrl))
     return path
 
 
