@@ -3,6 +3,8 @@ import json
 import pandas as pd
 from pdf_generation.task import import_data
 import json
+from .choices import RECIPIENTS
+from .models import *
 
 month_dict = [
     "months",
@@ -40,3 +42,21 @@ def generate_csv(report_data, event_data):
     yf.to_csv("media/csv/{}.csv".format(event_data["name"]))
     file = "media/csv/{}.csv".format(event_data["name"])
     import_data(file)
+
+
+def get_recipients(event_obj):
+    departments = Department.objects.filter(event=event_obj)
+    recipients = []
+    for department in departments:
+        users = User.objects.filter(department=department.department)
+        for user in users:
+            recipients.append(user.email)
+    recipients = recipients + RECIPIENTS
+    return recipients
+
+def get_dates(event_obj):
+    dates = list(Dates.objects.filter(event=event_obj))
+    
+    start_date = str(dates[0].start)
+    start_date = start_date[0:10]
+    return start_date 
