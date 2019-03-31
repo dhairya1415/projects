@@ -62,23 +62,21 @@ class EventViewSet(viewsets.ModelViewSet):
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
 
-    @method_decorator(login_required)
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop("partial", False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        print(serializer.validated_data)
-        if serializer.validated_data["creator_name"] == str(
-            request.user
-        ):  # to add .user.first_name
-            self.perform_update(serializer)
-            return Response(serializer.data)
+    # @method_decorator(login_required)
+    # def update(self, request, *args, **kwargs):
+    #     partial = kwargs.pop("partial", False)
+    #     instance = self.get_object()
+    #     serializer = self.get_serializer(instance, data=request.data, partial=partial)
+    #     serializer.is_valid(raise_exception=True)
+    #     print(serializer.validated_data)
+    #     if serializer.validated_data["creator"] == request.user:  # to add .user.first_name
+    #         self.perform_update(serializer)
+    #         return Response(serializer.data)
 
-        else:
-            raise serializers.ValidationError(
-                "You cannot edit the report you are not the creator"
-            )
+    #     else:
+    #         raise serializers.ValidationError(
+    #             "You cannot edit the report you are not the creator"
+    #         )
 
 
 """
@@ -95,10 +93,7 @@ class ReportViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         print(serializer.validated_data)
-        # serializer.validated_data["event"]["creator_name"] == request.user
-        if serializer.validated_data["event"].creator_name == str(
-            request.user
-        ):  # to add .user.first_name
+        if serializer.validated_data["event"].creator == request.user:  # to add .user.first_name
             self.perform_create(serializer)
             return Response(serializer.data)
 
@@ -107,25 +102,21 @@ class ReportViewSet(viewsets.ModelViewSet):
                 "You cannot create the report you are not the creator"
             )
 
-    @method_decorator(login_required)
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop("partial", False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        print(serializer.validated_data)
-        print(serializer.validated_data["event"].creator_name)
-        print(request.user)
-        if serializer.validated_data["event"].creator_name == str(
-            request.user
-        ):  # to add .user.first_name
-            self.perform_update(serializer)
-            return Response(serializer.data)
+    # @method_decorator(login_required)
+    # def update(self, request, *args, **kwargs):
+    #     partial = kwargs.pop("partial", False)
+    #     instance = self.get_object()
+    #     serializer = self.get_serializer(instance, data=request.data, partial=partial)
+    #     serializer.is_valid(raise_exception=True)
+    #     print(request.user)
+    #     if serializer.validated_data["event"].creator == request.user:  # to add .user.first_name
+    #         self.perform_update(serializer)
+    #         return Response(serializer.data)
 
-        else:
-            raise serializers.ValidationError(
-                "You cannot edit the report you are not the creator"
-            )
+    #     else:
+    #         raise serializers.ValidationError(
+    #             "You cannot edit the report you are not the creator"
+    #         )
 
 
 """
@@ -180,7 +171,6 @@ class ImageViewSet(viewsets.ModelViewSet):
 Department API data
 """
 
-
 class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
@@ -190,10 +180,7 @@ class DepartmentViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         print(serializer.validated_data)
-        # serializer.validated_data["event"]["creator_name"] == request.user
-        if serializer.validated_data["event"].creator_name == str(
-            request.user
-        ):  # to add .user.first_name
+        if serializer.validated_data["event"].creator == request.user:  # to add .user.first_name
             self.perform_create(serializer)
             return Response(serializer.data)
 
@@ -202,25 +189,22 @@ class DepartmentViewSet(viewsets.ModelViewSet):
                 "You cannot assign the department you are not the creator"
             )
 
-    @method_decorator(login_required)
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop("partial", False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        print(serializer.validated_data)
-        print(serializer.validated_data["event"].creator_name)
-        print(request.user)
-        if serializer.validated_data["event"].creator_name == str(
-            request.user
-        ):  # to add .user.first_name
-            self.perform_update(serializer)
-            return Response(serializer.data)
+    # @method_decorator(login_required)
+    # def update(self, request, *args, **kwargs):
+    #     partial = kwargs.pop("partial", False)
+    #     instance = self.get_object()
+    #     serializer = self.get_serializer(instance, data=request.data, partial=partial)
+    #     serializer.is_valid(raise_exception=True)
+    #     print(serializer.validated_data)
+    #     print(request.user)
+    #     if serializer.validated_data["event"].creator == request.user:  # to add .user.first_name
+    #         self.perform_update(serializer)
+    #         return Response(serializer.data)
 
-        else:
-            raise serializers.ValidationError(
-                "You cannot edit the departments you are not the creator"
-            )
+    #     else:
+    #         raise serializers.ValidationError(
+    #             "You cannot edit the departments you are not the creator"
+    #         )
 
 
 class DatesViewSet(viewsets.ModelViewSet):
@@ -232,37 +216,28 @@ class DatesViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         print(serializer.validated_data)
-        # serializer.validated_data["event"]["creator_name"] == request.user
-        if serializer.validated_data["event"].creator_name == str(
-            request.user
-        ):  # to add .user.first_name
+        if serializer.validated_data["event"].creator == request.user:  # to add .user.first_name
             self.perform_create(serializer)
             return Response(serializer.data)
-
         else:
             raise serializers.ValidationError(
                 "You cannot assign the dates you are not the creator"
             )
 
-    @method_decorator(login_required)
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop("partial", False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        print(serializer.validated_data)
-        print(serializer.validated_data["event"].creator_name)
-        print(request.user)
-        if serializer.validated_data["event"].creator_name == str(
-            request.user
-        ):  # to add .user.first_name
-            self.perform_update(serializer)
-            return Response(serializer.data)
-
-        else:
-            raise serializers.ValidationError(
-                "You cannot edit the dates you are not the creator"
-            )
+    # @method_decorator(login_required)
+    # def update(self, request, *args, **kwargs):
+    #     partial = kwargs.pop("partial", False)
+    #     instance = self.get_object()
+    #     serializer = self.get_serializer(instance, data=request.data, partial=partial)
+    #     serializer.is_valid(raise_exception=True)
+    #     print(request.user)
+    #     if serializer.validated_data["event"].creator_name == request.user:  # to add .user.first_name
+    #         self.perform_update(serializer)
+    #         return Response(serializer.data)
+    #     else:
+    #         raise serializers.ValidationError(
+    #             "You cannot edit the dates you are not the creator"
+    #         )
 
 
 @api_view(["POST"])
