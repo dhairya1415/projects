@@ -41,6 +41,7 @@ urlpatterns = [
         views.report_pdf_preview,
         name="report_pdf_preview",
     ),
+    path("profile/<str:username>",views.user_profile,name = "user_profile"),
     path("send_pdf/<int:pk>", views.send_pdf, name="send_pdf"),
     path("event/<str:date>", views.event_date, name="date_request"),
     path("event/<int:month>/<int:year>", views.event_list, name="month_request"),

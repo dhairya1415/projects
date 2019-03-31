@@ -8,7 +8,6 @@ from django.contrib.sites.shortcuts import get_current_site
 from datetime import datetime
 
 
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -83,15 +82,6 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
             "attendance",
         )
 
-    # def validate(self, data):
-    #
-    #     event = data['event']
-    #     venue = data['venue']
-    #     val_event = Event.objects.filter(dates__start = )
-    #     if user_qs.exists():
-    #         raise ValidationError("This sap_id already registered.")
-    #     return data
-
 class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(style={"input_type": "password"})
 
@@ -106,8 +96,6 @@ class SignUpSerializer(serializers.ModelSerializer):
             "department",
         )
         extra_kwargs = {"password": {"write_only": True}}
-
-    # Email Verification added here itself do not touch it
 
     def create(self, validated_data):
         if "djsce.ac.in" in validated_data["email"]:
@@ -143,4 +131,4 @@ class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=10)
     password = serializers.CharField(
         style={"input_type": "password"}
-    )  # ,write_only = True)
+    )

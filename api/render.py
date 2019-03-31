@@ -4,6 +4,33 @@ from django.template.loader import get_template
 import xhtml2pdf.pisa as pisa
 import os
 from urllib.request import urlopen
+from django.conf import settings
+
+def link_callback(uri, rel):
+    """
+    Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+    resources
+    """
+    # use short variable names
+    sUrl = settings.STATIC_URL
+    sRoot = settings.STATIC_ROOT
+    mUrl = settings.MEDIA_URL       #media/name.jpg
+    mRoot = settings.MEDIA_ROOT
+
+    # convert URIs to absolute system paths
+    if uri.startswith(mUrl):
+        path = os.path.join(mRoot, uri.replace(mUrl, ""))
+    elif uri.startswith(sUrl):
+        path = os.path.join(sRoot, uri.replace(sUrl, ""))
+    else:
+        return uri  # handle absolute uri (ie: http://some.tld/foo.png)
+
+    # make sure that file exists
+    if not os.path.isfile(path):
+            raise Exception(
+                'media URI must start with %s or %s' % (sUrl, mUrl)
+            )
+    return path
 
 
 def render_to_file(path: str, params: dict, file):
@@ -12,7 +39,7 @@ def render_to_file(path: str, params: dict, file):
     file_name = "{}.pdf".format(file)
     file_path = os.path.join("media/pdf", file_name)
     file_pdf = open(file_path, "wb")
-    pisaStatus = pisa.CreatePDF(html, dest=file_pdf)
+    pisaStatus = pisa.CreatePDF(html, dest=file_pdf, link_callback=link_callback)
     file_pdf.close()
 
 
