@@ -27,12 +27,12 @@ User Data API
 
 
 @api_view(["GET"])
-def user_list(request, first):
+def user_profile(request, username):
     """
     List all events according to month and year
     """
     if request.method == "GET":
-        user = User.objects.filter(username=first)
+        user = User.objects.filter(username=username)
         serializer = UserSerializer(user, many=True)
         return Response(serializer.data)
 
@@ -85,6 +85,199 @@ class EventViewSet(viewsets.ModelViewSet):
 
 
 """
+Report API DATA
+"""
+
+
+class ReportViewSet(viewsets.ModelViewSet):
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializer
+
+    @method_decorator(login_required)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        print(serializer.validated_data)
+        # serializer.validated_data["event"]["creator_name"] == request.user
+        if serializer.validated_data["event"].creator_name == str(
+            request.user
+        ):  # to add .user.first_name
+            self.perform_create(serializer)
+            return Response(serializer.data)
+
+        else:
+            raise serializers.ValidationError(
+                "You cannot create the report you are not the creator"
+            )
+
+    @method_decorator(login_required)
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        print(serializer.validated_data)
+        print(serializer.validated_data["event"].creator_name)
+        print(request.user)
+        if serializer.validated_data["event"].creator_name == str(
+            request.user
+        ):  # to add .user.first_name
+            self.perform_update(serializer)
+            return Response(serializer.data)
+
+        else:
+            raise serializers.ValidationError(
+                "You cannot edit the report you are not the creator"
+            )
+
+
+"""
+Image API DATA
+"""
+
+
+class ImageViewSet(viewsets.ModelViewSet):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        report_id = serializer.data["report"]
+        report = Report.objects.get(pk=report_id)
+        event = report.event
+        serializer_context = {"request": request}
+        report_json = ReportSerializer(report, context=serializer_context).data
+        event_json = EventSerializer(event).data
+        dates_len = len(event_json["dates"])
+        filename = event_json["name"] + "$" + event_json["dates"][0]["start"][0:10]
+        event_json["dates"] = {
+            "start": event_json["dates"][0]["start"][0:10],
+            "end": event_json["dates"][dates_len - 1]["end"][0:10],
+        }
+        for items in report_json["image"]:
+            items["image"] = items["image"][22::]
+            print(items["image"])
+        print(report_json["image"])
+
+        params = {
+            "report_dict": report_json,
+            "event_dict": event_json,
+            "request": request,
+        }
+
+        render_to_file("pdf.html", params, filename)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
+
+
+# Here as soon as an image is added the json data of the report generated is taken for pdf generation
+# All the function for pdf generation will be called in this create method
+# Any update or new image addition will also override the previous csv or pdf generated
+
+"""
+Department API data
+"""
+
+
+class DepartmentViewSet(viewsets.ModelViewSet):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+
+    @method_decorator(login_required)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        print(serializer.validated_data)
+        # serializer.validated_data["event"]["creator_name"] == request.user
+        if serializer.validated_data["event"].creator_name == str(
+            request.user
+        ):  # to add .user.first_name
+            self.perform_create(serializer)
+            return Response(serializer.data)
+
+        else:
+            raise serializers.ValidationError(
+                "You cannot assign the department you are not the creator"
+            )
+
+    @method_decorator(login_required)
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        print(serializer.validated_data)
+        print(serializer.validated_data["event"].creator_name)
+        print(request.user)
+        if serializer.validated_data["event"].creator_name == str(
+            request.user
+        ):  # to add .user.first_name
+            self.perform_update(serializer)
+            return Response(serializer.data)
+
+        else:
+            raise serializers.ValidationError(
+                "You cannot edit the departments you are not the creator"
+            )
+
+
+class DatesViewSet(viewsets.ModelViewSet):
+    queryset = Dates.objects.all()
+    serializer_class = DatesSerializer
+
+    @method_decorator(login_required)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        print(serializer.validated_data)
+        # serializer.validated_data["event"]["creator_name"] == request.user
+        if serializer.validated_data["event"].creator_name == str(
+            request.user
+        ):  # to add .user.first_name
+            self.perform_create(serializer)
+            return Response(serializer.data)
+
+        else:
+            raise serializers.ValidationError(
+                "You cannot assign the dates you are not the creator"
+            )
+
+    @method_decorator(login_required)
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        print(serializer.validated_data)
+        print(serializer.validated_data["event"].creator_name)
+        print(request.user)
+        if serializer.validated_data["event"].creator_name == str(
+            request.user
+        ):  # to add .user.first_name
+            self.perform_update(serializer)
+            return Response(serializer.data)
+
+        else:
+            raise serializers.ValidationError(
+                "You cannot edit the dates you are not the creator"
+            )
+
+
+@api_view(["POST"])
+def dates_multiple(request):
+    list_dates = request.data
+    for date in list_dates:
+        x = DatesSerializer(data=date)
+        if x.is_valid():
+            x.save()
+
+
+"""
 Event data by month
 """
 
@@ -129,8 +322,8 @@ def report_pdf_download(request, pk):
         report = Report.objects.get(id=pk)
         event = report.event
         event_serializer = EventSerializer(event).data
-        name = event_serializer['name']
-        date = event_serializer['dates'][0]['start'][0:10]
+        name = event_serializer["name"]
+        date = event_serializer["dates"][0]["start"][0:10]
         response = HttpResponse(content_type="text/pdf")
         filename = "media/pdf/{}${}.pdf".format(name, date)
         download_name = "{}_Report.pdf".format(name)
@@ -148,9 +341,9 @@ def report_pdf_preview(request, pk):
         report = Report.objects.get(id=pk)
         event = report.event
         event_serializer = EventSerializer(event).data
-        name = event_serializer['name']
-        date = event_serializer['dates'][0]['start'][0:10]
-        filename = "media/pdf/{}${}.pdf".format(name,date)
+        name = event_serializer["name"]
+        date = event_serializer["dates"][0]["start"][0:10]
+        filename = "media/pdf/{}${}.pdf".format(name, date)
         dataset = open(filename, "r")
         response = HttpResponse(dataset, content_type="application/pdf")
         return response
@@ -172,20 +365,23 @@ def month_report(request, month, year):
         serializer = list(serializer.data)
         li = []
         for item in serializer:
-            print(item['id'])
+            print(item["id"])
             if item["id"] in li:
                 serializer.remove(item)
             else:
                 li.append(item["id"])
-                item["dates"]= {"start":item["dates"][0]["start"],"end":item["dates"][len(item["dates"])-1]["end"]}
+                item["dates"] = {
+                    "start": item["dates"][0]["start"],
+                    "end": item["dates"][len(item["dates"]) - 1]["end"],
+                }
                 dept_list = []
                 for dept in item["departments"]:
                     dept = dept["department"]
                     dept_list.append(dept)
                 item["departments"] = dept_list
-                item["start"]= item["dates"]["start"][0:10]
-                item["end"]= item["dates"]["end"][0:10]
-                item.pop('dates')
+                item["start"] = item["dates"]["start"][0:10]
+                item["end"] = item["dates"]["end"][0:10]
+                item.pop("dates")
         month_name = month_dict[month]
         filename = "media/csv_month/{}.csv".format(month_name)
         start_date = "2019-{}-01".format(month)
@@ -241,97 +437,6 @@ def send_pdf(request, pk):
 
 
 """
-Report API DATA
-"""
-
-
-class ReportViewSet(viewsets.ModelViewSet):
-    queryset = Report.objects.all()
-    serializer_class = ReportSerializer
-
-    @method_decorator(login_required)
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        print(serializer.validated_data)
-        # serializer.validated_data["event"]["creator_name"] == request.user
-        if serializer.validated_data["event"].creator_name == str(
-            request.user
-        ):  # to add .user.first_name
-            self.perform_update(serializer)
-            return Response(serializer.data)
-
-        else:
-            raise serializers.ValidationError(
-                "You cannot create the report you are not the creator"
-            )
-
-    @method_decorator(login_required)
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop("partial", False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        print(serializer.validated_data)
-        print(serializer.validated_data["event"].creator_name)
-        print(request.user)
-        if serializer.validated_data["event"].creator_name == str(
-            request.user
-        ):  # to add .user.first_name
-            self.perform_update(serializer)
-            return Response(serializer.data)
-
-        else:
-            raise serializers.ValidationError(
-                "You cannot edit the report you are not the creator"
-            )
-
-
-"""
-Image API DATA
-"""
-
-
-class ImageViewSet(viewsets.ModelViewSet):
-    queryset = Image.objects.all()
-    serializer_class = ImageSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-
-        report_id = serializer.data["report"]
-        report = Report.objects.get(pk=report_id)
-        event = report.event
-        serializer_context = {"request": request}
-        report_json = ReportSerializer(report, context=serializer_context).data
-        event_json = EventSerializer(event).data
-        dates_len = len(event_json["dates"])
-        filename = event_json['name']+'$'+event_json["dates"][0]["start"][0:10]
-        event_json["dates"] = {'start':event_json["dates"][0]['start'][0:10],'end':event_json["dates"][dates_len-1]['end'][0:10]}
-        for items in report_json["image"]:
-            items["image"] = items["image"][22::]
-        print(report_json["image"])
-        params ={
-        'report_dict':report_json,
-        'event_dict':event_json,
-        'request': request,
-
-        }
-
-        render_to_file("pdf.html", params, filename)
-        headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data, status=status.HTTP_201_CREATED, headers=headers
-        )
-
-
-# Here as soon as an image is added the json data of the report generated is taken for pdf generation
-# All the function for pdf generation will be called in this create method
-# Any update or new image addition will also override the previous csv or pdf generated
-
-"""
 User Signup
 """
 
@@ -342,38 +447,8 @@ class SignUp(CreateAPIView):
 
 
 """
-User Logout
-"""
-
-
-class DepartmentViewSet(viewsets.ModelViewSet):
-    queryset = Department.objects.all()
-    serializer_class = DepartmentSerializer
-
-
-class DatesViewSet(viewsets.ModelViewSet):
-    queryset = Dates.objects.all()
-    serializer_class = DatesSerializer
-
-
-@api_view(["POST"])
-def dates_multiple(request):
-    list_dates = request.data
-    for date in list_dates:
-        x = DatesSerializer(data=date)
-        if x.is_valid():
-            x.save()
-
-
-# class Logout(APIView):
-#     def post(self, request):
-#         logout(request)
-#         # return HttpResponseRedirect(redirect_to="//")
-
-"""
 User Activation
 """
-
 
 def activate(request, uidb64, token):
     try:

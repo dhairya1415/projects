@@ -8,7 +8,6 @@ from django.contrib.sites.shortcuts import get_current_site
 from datetime import datetime
 
 
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -20,19 +19,30 @@ class DepartmentSerializer(serializers.ModelSerializer):
         model = Department
         fields = "__all__"
 
+
 class DatesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dates
         fields = "__all__"
 
     def validate(self, data):
-        event_check = data['event']
-        start = datetime.date(data['start'])
-        end = datetime.date(data['end'])
-        event = Event.objects.filter(dates__start__date__lte=start,dates__end__date__gte=end,venue=event_check.venue)
-        event_1 = Event.objects.filter(dates__start__date__gte=start,dates__end__date__lte=end,venue=event_check.venue)
+        event_check = data["event"]
+        start = datetime.date(data["start"])
+        end = datetime.date(data["end"])
+        event = Event.objects.filter(
+            dates__start__date__lte=start,
+            dates__end__date__gte=end,
+            venue=event_check.venue,
+        )
+        event_1 = Event.objects.filter(
+            dates__start__date__gte=start,
+            dates__end__date__lte=end,
+            venue=event_check.venue,
+        )
         if event.exists() or event_1.exists():
-            raise serializers.ValidationError("This location and timing is already occupied.")
+            raise serializers.ValidationError(
+                "This location and timing is already occupied."
+            )
         return data
 
 
@@ -57,6 +67,7 @@ class EventSerializer(serializers.ModelSerializer):
             "dates",
             'creator',
         )
+
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
     report = serializers.PrimaryKeyRelatedField(queryset=Report.objects.all())
@@ -83,14 +94,6 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
             "attendance",
         )
 
-    # def validate(self, data):
-    #
-    #     event = data['event']
-    #     venue = data['venue']
-    #     val_event = Event.objects.filter(dates__start = )
-    #     if user_qs.exists():
-    #         raise ValidationError("This sap_id already registered.")
-    #     return data
 
 class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(style={"input_type": "password"})
@@ -107,14 +110,12 @@ class SignUpSerializer(serializers.ModelSerializer):
         )
         extra_kwargs = {"password": {"write_only": True}}
 
-    # Email Verification added here itself do not touch it
-
     def create(self, validated_data):
         if "djsce.ac.in" in validated_data["email"]:
             user = User(
                 first_name=validated_data["first_name"],
                 last_name=validated_data["last_name"],
-                email=validated_data["email"] + '@djsce.ac.in', # + 'djsce.ac.in'
+                email=validated_data["email"] + "@djsce.ac.in",  # + 'djsce.ac.in'
                 username=validated_data["username"],
                 department=validated_data["department"],
             )
@@ -135,12 +136,11 @@ class SignUpSerializer(serializers.ModelSerializer):
             email.send()
             return user
         else:
-            raise serializers.ValidationError("Email Id does not match the domain @djsce.ac.in")
-
+            raise serializers.ValidationError(
+                "Email Id does not match the domain @djsce.ac.in"
+            )
 
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=10)
-    password = serializers.CharField(
-        style={"input_type": "password"}
-    )  # ,write_only = True)
+    password = serializers.CharField(style={"input_type": "password"})
