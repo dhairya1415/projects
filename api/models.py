@@ -16,7 +16,7 @@ class Event(models.Model):
     expert_name = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     organizer = models.TextField(null=True, blank=True)
-    creator_name = models.CharField(max_length=256, null=True, blank=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return "{} : {}".format(self.pk, self.name)

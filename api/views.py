@@ -56,10 +56,10 @@ class EventViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         # Scheduling of events logic will be here
-        serializer.validated_data["creator_name"] = str(
-            request.user
-        )  # to add .user.first_name
-        self.perform_create(serializer)
+        serializer.save()
+        event = self.perform_create(serializer)
+        event.creator = request.user
+        event.save()
         headers = self.get_success_headers(serializer.data)
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
