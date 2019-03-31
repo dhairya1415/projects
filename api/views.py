@@ -21,7 +21,7 @@ from .Email import send_mail
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+
 """
 User Data API
 """
@@ -245,9 +245,13 @@ class DatesViewSet(viewsets.ModelViewSet):
 def dates_multiple(request):
     list_dates = request.data
     for date in list_dates:
+        print(date)
         x = DatesSerializer(data=date)
         if x.is_valid():
             x.save()
+        else:
+            return HttpResponse(status=400)
+    return HttpResponse('OK', status=200)
 
 
 """
