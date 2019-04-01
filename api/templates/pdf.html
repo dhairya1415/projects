@@ -26,7 +26,7 @@
         <h4><b>Organized by:</b></h4>
         <ul>
             {% for item in event_dict.departments %}
-                <li><h5> {{item.department}} </h5></li>
+                <li><h5> {{item}} </h5></li>
             {% endfor %}
         </ul>
         <h4><b>Date:</b>  {{event_dict.dates.start}}  to  {{event_dict.dates.end}} </h4>

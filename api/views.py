@@ -149,8 +149,11 @@ class ImageViewSet(viewsets.ModelViewSet):
         for items in report_json["image"]:
             items["image"] = items["image"][22::]
         report_json["attendance"] = report_json["attendance"][22::]
-        print(report_json["attendance"])
-
+        dept_list = []
+        for items in event_json["departments"]:
+            dept_list.append(items["department"])
+        event_json["departments"] = dept_list
+        print(event_json["departments"])
         params = {
             "report_dict": report_json,
             "event_dict": event_json,
