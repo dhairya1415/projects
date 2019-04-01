@@ -411,6 +411,7 @@ Email PDF
 
 
 @api_view(["GET"])
+@login_required()
 def send_pdf(request, pk):
     if request.method == "GET":
         report = Report.objects.get(id=pk)
@@ -421,14 +422,12 @@ def send_pdf(request, pk):
         response = HttpResponse(content_type="text/pdf")
         teacher_name = request.user.first_name + " " + request.user.last_name
         send_mail(filename, teacher_name, event_obj)
-
         return response
 
 
 """
 User Signup
 """
-
 
 class SignUp(CreateAPIView):
     queryset = User.objects.all()
