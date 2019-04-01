@@ -20,6 +20,7 @@ from django.core.mail import EmailMessage
 from .Email import send_mail
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from datetime import datetime, timedelta
 
 
 """
@@ -56,7 +57,6 @@ class EventViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        # Scheduling of events logic will be here
         event = serializer.save(creator=request.user)
         headers = self.get_success_headers(serializer.data)
         return Response(
@@ -301,7 +301,13 @@ def event_list_by_date(request, date):
     List all Events according to date
     """
     if request.method == "GET":
-        dates = Dates.objects.filter(start__date=date)
+        start_date = (datetime.strptime(date, '%Y-%m-%d') -timedelta(days = 2))
+        start_date = start_date.strftime('%Y-%m-%d')
+        end_date = (datetime.strptime(date, '%Y-%m-%d') + timedelta(days = 2))
+        end_date = end_date.strftime('%Y-%m-%d')
+        dates = Dates.objects.filter(start__date__range = [start_date,end_date]) #, end__date__lte = end_date)
+        if not dates:
+            dates = Dates.objects.filter(end__date__range = [start_date,end_date])
         events = set([d.event for d in dates.all()])
         serializer = EventSerializer(events, many=True)
         # event = Event.objects.filter(dates__start__month = month,dates__start__year = year)
