@@ -148,8 +148,8 @@ class ImageViewSet(viewsets.ModelViewSet):
         }
         for items in report_json["image"]:
             items["image"] = items["image"][22::]
-            print(items["image"])
-        print(report_json["image"])
+        report_json["attendance"] = report_json["attendance"][22::]
+        print(report_json["attendance"])
 
         params = {
             "report_dict": report_json,
@@ -240,7 +240,6 @@ class DatesViewSet(viewsets.ModelViewSet):
     #             "You cannot edit the dates you are not the creator"
     #         )
 
-
 @api_view(["POST"])
 def dates_multiple(request):
     list_dates = request.data
@@ -301,17 +300,15 @@ def event_list_by_date(request, date):
     List all Events according to date
     """
     if request.method == "GET":
-        start_date = (datetime.strptime(date, '%Y-%m-%d') -timedelta(days = 2))
+        start_date = (datetime.strptime(date, '%Y-%m-%d') -timedelta(days = 1))
         start_date = start_date.strftime('%Y-%m-%d')
-        end_date = (datetime.strptime(date, '%Y-%m-%d') + timedelta(days = 2))
+        end_date = (datetime.strptime(date, '%Y-%m-%d') + timedelta(days = 1))
         end_date = end_date.strftime('%Y-%m-%d')
         dates = Dates.objects.filter(start__date__range = [start_date,end_date]) #, end__date__lte = end_date)
         if not dates:
             dates = Dates.objects.filter(end__date__range = [start_date,end_date])
         events = set([d.event for d in dates.all()])
         serializer = EventSerializer(events, many=True)
-        # event = Event.objects.filter(dates__start__month = month,dates__start__year = year)
-        # serializer = EventSerializer(event,context={'request':request} ,many=True)
         return Response(serializer.data)
 
 

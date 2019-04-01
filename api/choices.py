@@ -12,6 +12,27 @@ DEPARTMENT = (
     ("OTHER", "Other/ No department"),
 )
 
+OUTCOME = (
+('PO1','PO1'),
+('PO2','PO2'),
+('PO3','PO3'),
+('PO4','PO4'),
+('PO5','PO5'),
+('PO6','PO6'),
+('PO7','PO7'),
+('PO8','PO8'),
+('PO9','PO9'),
+('PO10','PO10'),
+('PO11','PO11'),
+('PO12','PO12'),
+)
+
+PSO = (
+('PSO1','PSO1'),
+('PSO2','PSO2'),
+('PSO3','PSO3'),
+('PSO4','PSO4')
+)
 department = {
     "EXTC": "Electronics & Telecommunication Engineering Department, D.J. Sanghvi COE",
     "MECH": "Mechanical Engineering Department, D.J. Sanghvi COE",
