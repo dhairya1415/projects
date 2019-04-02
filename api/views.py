@@ -348,7 +348,7 @@ def report_pdf_preview(request, pk):
         name = event_serializer["name"]
         date = event_serializer["dates"][0]["start"][0:10]
         filename = "media/pdf/{}${}.pdf".format(name, date)
-        dataset = open(filename, "r")
+        dataset = open(filename, "rb")
         response = HttpResponse(dataset, content_type="application/pdf")
         return response
 
