@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
-from .models import User, Event, Report, Image, Department, Dates
+from .models import *
 from django.template.loader import render_to_string
 from .token import account_activation_token
 from django.core.mail import EmailMessage
@@ -60,13 +60,11 @@ class CalendarDateSerializer(serializers.ModelSerializer):
             'allDay',
         ]
 
-
 class EventSerializer(serializers.ModelSerializer):
     report = serializers.PrimaryKeyRelatedField(read_only=True)
     departments = DepartmentSerializer(read_only=True, many=True)
     dates = DateSerializer(read_only=True, many=True)
     creator = serializers.PrimaryKeyRelatedField(read_only=True)
-
     class Meta:
         model = Event
         fields = (
@@ -78,6 +76,22 @@ class EventSerializer(serializers.ModelSerializer):
             "expert_name",
             "description",
             "organizer",
+            "PO1",
+            "PO2",
+            "PO3",
+            "PO4",
+            "PO5",
+            "PO6",
+            "PO7",
+            "PO8",
+            "PO9",
+            "PO10",
+            "PO11",
+            "PO12",
+            "PSO1",
+            "PSO2",
+            "PSO3",
+            "PSO4",
             "report",
             "dates",
             'creator',

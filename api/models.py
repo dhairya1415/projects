@@ -17,6 +17,23 @@ class Event(models.Model):
     description = models.TextField(null=True, blank=True)
     organizer = models.TextField(null=True, blank=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    PO1 = models.BooleanField(default = False)
+    PO2 = models.BooleanField(default = False)
+    PO3 = models.BooleanField(default = False)
+    PO4 = models.BooleanField(default = False)
+    PO5 = models.BooleanField(default = False)
+    PO6 = models.BooleanField(default = False)
+    PO7 = models.BooleanField(default = False)
+    PO8 = models.BooleanField(default = False)
+    PO9 = models.BooleanField(default = False)
+    PO10 = models.BooleanField(default = False)
+    PO11 = models.BooleanField(default = False)
+    PO12 = models.BooleanField(default = False)
+    PSO1 = models.BooleanField(default = False)
+    PSO2 = models.BooleanField(default = False)
+    PSO3 = models.BooleanField(default = False)
+    PSO4 = models.BooleanField(default = False)
+
 
     def __str__(self):
         return "{} : {}".format(self.pk, self.name)
@@ -51,6 +68,9 @@ class Report(models.Model):
 class Image(models.Model):
     image = models.ImageField()
     report = models.ForeignKey(Report, related_name="image", on_delete=models.CASCADE)
+
+
+
 
 
 # Connect model Event to Model User one event many users#
