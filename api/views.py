@@ -87,7 +87,7 @@ Report API DATA
 
 class ReportViewSet(viewsets.ModelViewSet):
     queryset = Report.objects.all()
-    serializer_class = ReportSerializer
+    serializer_class = ReportWithEventSerializer
 
     @method_decorator(login_required)
     def create(self, request, *args, **kwargs):
@@ -138,7 +138,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         report = Report.objects.get(pk=report_id)
         event = report.event
         serializer_context = {"request": request}
-        report_json = ReportSerializer(report, context=serializer_context).data
+        report_json = ReportWithEventSerializer(report, context=serializer_context).data
         event_json = EventSerializer(event).data
         dates_len = len(event_json["dates"])
         filename = event_json["name"] + "$" + event_json["dates"][0]["start"][0:10]

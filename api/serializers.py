@@ -60,8 +60,15 @@ class CalendarDateSerializer(serializers.ModelSerializer):
             'allDay',
         ]
 
+
+class ReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        exclude = ['event', ]
+
+
 class EventSerializer(serializers.ModelSerializer):
-    report = serializers.PrimaryKeyRelatedField(read_only=True)
+    report = ReportSerializer(read_only=True)
     departments = DepartmentSerializer(read_only=True, many=True)
     dates = DateSerializer(read_only=True, many=True)
     creator = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -106,7 +113,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         fields = "__all__"
 
 
-class ReportSerializer(serializers.HyperlinkedModelSerializer):
+class ReportWithEventSerializer(serializers.HyperlinkedModelSerializer):
     image = ImageSerializer(read_only=True, many=True)
     event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all())
     event_data = EventSerializer(read_only=True, source="event")
