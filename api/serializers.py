@@ -68,7 +68,8 @@ class ReportSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    report = ReportSerializer(read_only=True)
+    report = serializers.PrimaryKeyRelatedField(read_only=True)
+    report_data = ReportSerializer(read_only=True, source="report")
     departments = DepartmentSerializer(read_only=True, many=True)
     dates = DateSerializer(read_only=True, many=True)
     creator = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -100,6 +101,7 @@ class EventSerializer(serializers.ModelSerializer):
             "PSO3",
             "PSO4",
             "report",
+            "report_data",
             "dates",
             'creator',
         )
