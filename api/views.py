@@ -389,8 +389,11 @@ def month_report(request, month, year):
                 item.pop("dates")
         month_name = month_dict[month]
         filename = "media/csv_month/{}.csv".format(month_name)
-        start_date = "2019-{}-01".format(month)
-        end_date = "2019-{}-31".format(month)
+        
+        # start_date = "2019-{}-01".format(month)
+        # end_date = "2019-{}-31".format(month)
+        start_date = (datetime.strptime("2019-{}-01".format(month), '%Y-%m-%d'))
+        end_date = (datetime.strptime("2019-{}-30".format(month), '%Y-%m-%d'))
         dates = pd.date_range(start_date, end_date)
         zf = pd.DataFrame(index=dates)
         df = pd.DataFrame.from_dict(serializer)
