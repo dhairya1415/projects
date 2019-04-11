@@ -21,21 +21,39 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register("event_custom", views.EventViewSet)
-router.register("report", views.ReportViewSet)
-router.register("image", views.ImageViewSet)
+router.register("events", views.EventViewSet)
+router.register("reports", views.ReportViewSet)
+router.register("images", views.ImageViewSet)
+router.register("departments", views.DepartmentViewSet)
+router.register("dates", views.DatesViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("event/<int:month>/<int:year>", views.event_list, name="month_request"),
-    path("month/<int:month>", views.month_report, name="month_report"),
-    path("report_pdf/<int:pk>", views.report_pdf, name="report_pdf"),
-    path("event/<str:date>", views.event_date, name="date_request"),
+    path("dates-multiple/", views.dates_multiple, name="dates_multiple"),
+    path("depts-multiple/", views.depts_multiple, name="depts_multiple"),
+    path(
+        "month-report/<int:month>/<int:year>", views.month_report, name="month_report"
+    ),
+    path(
+        "report_pdf_download/<int:pk>",
+        views.report_pdf_download,
+        name="report_pdf_donwload",
+    ),
+    path(
+        "report_pdf_preview/<int:pk>",
+        views.report_pdf_preview,
+        name="report_pdf_preview",
+    ),
+    path("profile/<str:username>", views.user_profile, name="user_profile"),
+    path("profile/event-list", views.get_event_list, name="event_list"),
+    path("send-pdf/<int:pk>", views.send_pdf, name="send_pdf"),
     path("admin/", admin.site.urls),
-    path("signup/", views.SignUp.as_view(), name="signup"),  # Signup
-    # path("login/", views.Login.as_view(), name="login"),
-    # path("logout/", views.Logout.as_view(), name="logout"),
+    path("signup/", views.SignUp.as_view(), name="signup"),
     path("activate/<str:uidb64>/<str:token>", views.activate, name="activate"),
+
+    path("event-calendar/", views.event_list_calendar_all, name="date_request"),
+    path("event-calendar/<str:date>", views.event_list_by_date, name="date_request"),
+    path("event-calendar/<int:month>/<int:year>", views.event_list_by_month, name="month_request"),
 ]
 
 # Dhairya Check these urls
